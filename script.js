@@ -1,90 +1,131 @@
-// ========================================
-// SIF FOREX HUB - MAIN JAVASCRIPT
-// ========================================
+/* =========================================================
+   SIF FOREX HUB - COMPLETE SCRIPT
+   Risk Calculator + Lot Size + Trading Journal + Dashboard
+   ========================================================= */
 
 
-// ========================================
-// RISK & LOT SIZE CALCULATOR
-// ========================================
+/* =========================================================
+   1. HELPER FUNCTIONS
+   ========================================================= */
+
+function getNumber(id) {
+    const element = document.getElementById(id);
+
+    if (!element) {
+        return 0;
+    }
+
+    const value = parseFloat(element.value);
+
+    return isNaN(value) ? 0 : value;
+}
+
+
+function getValue(id) {
+    const element = document.getElementById(id);
+
+    if (!element) {
+        return "";
+    }
+
+    return element.value.trim();
+}
+
+
+function getTrades() {
+    try {
+        const savedTrades = localStorage.getItem("sifTrades");
+
+        if (!savedTrades) {
+            return [];
+        }
+
+        const trades = JSON.parse(savedTrades);
+
+        return Array.isArray(trades) ? trades : [];
+
+    } catch (error) {
+        console.error("Error reading trades:", error);
+        return [];
+    }
+}
+
+
+function saveTrades(trades) {
+    localStorage.setItem("sifTrades", JSON.stringify(trades));
+}
+
+
+/* =========================================================
+   2. RISK CALCULATOR
+   ========================================================= */
 
 function calculateRisk() {
 
-    const balance = Number(
-        document.getElementById("balance").value
-    );
+    const balance = getNumber("balance");
+    const riskPercent = getNumber("risk");
+    const stopLoss = getNumber("stopLoss");
+    const pair = getValue("pair");
+    const currentPrice = getNumber("price");
 
-    const risk = Number(
-        document.getElementById("risk").value
-    );
+    const resultBox = document.getElementById("risk-result");
 
-    const stopLoss = Number(
-        document.getElementById("stopLoss").value
-    );
-
-    const pairElement = document.getElementById("pair");
-    const priceElement = document.getElementById("price");
-    const result = document.getElementById("risk-result");
-
-    if (!balance || !risk || !stopLoss) {
-
-        result.innerHTML = `
-            <p>Please enter your balance, risk and stop loss.</p>
-        `;
-
+    if (!resultBox) {
+        alert("Risk result box was not found.");
         return;
     }
 
-    const pair = pairElement ? pairElement.value : "EURUSD";
-    const price = priceElement ? Number(priceElement.value) : 0;
-
-    const riskAmount = balance * (risk / 100);
-
-    let pipSize = 0.0001;
-
-    if (pair.includes("JPY")) {
-        pipSize = 0.01;
+    if (balance <= 0) {
+        resultBox.innerHTML =
+            "<p>Please enter a valid account balance.</p>";
+        return;
     }
 
-    let pipValuePerLot = 10;
-
-    /*
-       For USD-quoted pairs such as:
-       EUR/USD
-       GBP/USD
-       AUD/USD
-       NZD/USD
-
-       1 standard lot ≈ $10 per pip.
-    */
-
-    const cleanPair = pair.replace("/", "");
-
-    const usdQuotePairs = [
-        "EURUSD",
-        "GBPUSD",
-        "AUDUSD",
-        "NZDUSD"
-    ];
-
-    if (!usdQuotePairs.includes(cleanPair) && price > 0) {
-
-        pipValuePerLot =
-            (pipSize * 100000) / price;
+    if (riskPercent <= 0) {
+        resultBox.innerHTML =
+            "<p>Please enter a valid risk percentage.</p>";
+        return;
     }
 
-    const lotSize =
-        riskAmount /
-        (stopLoss * pipValuePerLot);
+    if (stopLoss <= 0) {
+        resultBox.innerHTML =
+            "<p>Please enter a valid stop loss in pips.</p>";
+        return;
+    }
 
-    result.innerHTML = `
-        <div class="calculator-result">
+    if (!pair) {
+        resultBox.innerHTML =
+            "<p>Please select a currency pair.</p>";
+        return;
+    }
 
-            <h3>Risk Calculation</h3>
 
-            <p>
-                <strong>Pair:</strong>
-                ${cleanPair.slice(0, 3)}/${cleanPair.slice(3)}
-            </p>
+    /* Maximum money you can lose */
+    const riskAmount = balance * (riskPercent / 100);
+
+
+    /* Calculate approximate pip value */
+    const pipValue = getPipValue(pair, currentPrice);
+
+
+    /* Calculate lot size */
+    let lotSize = riskAmount / (stopLoss * pipValue);
+
+
+    /* Protect against invalid calculation */
+    if (!isFinite(lotSize) || lotSize <= 0) {
+        lotSize = 0;
+    }
+
+
+    /* Round to 3 decimal places */
+    lotSize = Math.floor(lotSize * 1000) / 1000;
+
+
+    resultBox.innerHTML = `
+        <div class="risk-result-card">
+
+            <h3>📊 Risk Calculation</h3>
 
             <p>
                 <strong>Account Balance:</strong>
@@ -93,13 +134,27 @@ function calculateRisk() {
 
             <p>
                 <strong>Risk:</strong>
-                ${risk}%
+                ${riskPercent}%
             </p>
 
             <p>
                 <strong>Stop Loss:</strong>
                 ${stopLoss} pips
             </p>
+
+            <p>
+                <strong>Currency Pair:</strong>
+                ${pair}
+            </p>
+
+            ${
+                currentPrice > 0
+                ? `<p>
+                    <strong>Current Price:</strong>
+                    ${currentPrice}
+                   </p>`
+                : ""
+            }
 
             <h2>
                 Maximum Risk:
@@ -112,8 +167,9 @@ function calculateRisk() {
             </h2>
 
             <p>
-                Always verify the final lot size with
-                your broker before placing a live trade.
+                ⚠️ This is an estimated calculation.
+                Always verify the pip value and contract
+                specifications with your broker.
             </p>
 
         </div>
@@ -121,68 +177,154 @@ function calculateRisk() {
 }
 
 
-// ========================================
-// TRADING JOURNAL
-// ========================================
+/* =========================================================
+   3. PIP VALUE CALCULATOR
+   ========================================================= */
+
+function getPipValue(pair, price) {
+
+    pair = pair.toUpperCase();
+
+    /*
+       Standard forex lot = 100,000 units.
+
+       For pairs where USD is the quote currency:
+       approximately $10 per pip for 1 standard lot.
+
+       For USD/JPY and other USD-base pairs,
+       the value depends on price.
+    */
+
+
+    /* EURUSD, GBPUSD, AUDUSD, NZDUSD */
+    if (
+        pair === "EURUSD" ||
+        pair === "GBPUSD" ||
+        pair === "AUDUSD" ||
+        pair === "NZDUSD"
+    ) {
+        return 10;
+    }
+
+
+    /* USDJPY */
+    if (pair === "USDJPY") {
+
+        if (price > 0) {
+            return 1000 / price;
+        }
+
+        return 6.67;
+    }
+
+
+    /* USDCHF */
+    if (pair === "USDCHF") {
+
+        if (price > 0) {
+            return 10 / price;
+        }
+
+        return 11;
+    }
+
+
+    /* USDCAD */
+    if (pair === "USDCAD") {
+
+        if (price > 0) {
+            return 10 / price;
+        }
+
+        return 7.3;
+    }
+
+
+    /*
+       Approximate values for cross/minor pairs.
+       These are estimates and can vary with the market.
+    */
+
+    const approximatePipValues = {
+
+        EURGBP: 13.0,
+        EURJPY: 6.7,
+        EURCHF: 11.5,
+        EURAUD: 6.5,
+        EURNZD: 6.0,
+        EURCAD: 7.3,
+
+        GBPJPY: 6.7,
+        GBPCHF: 11.5,
+        GBPAUD: 6.5,
+        GBPNZD: 6.0,
+        GBPCAD: 7.3,
+
+        CHFJPY: 6.7,
+        CADJPY: 6.7,
+        AUDJPY: 6.7,
+        NZDJPY: 6.7,
+
+        AUDCAD: 7.3,
+        AUDCHF: 11.5,
+        AUDNZD: 6.0,
+
+        NZDCAD: 7.3,
+        NZDCHF: 11.5,
+
+        CADCHF: 11.5
+    };
+
+
+    if (approximatePipValues[pair]) {
+        return approximatePipValues[pair];
+    }
+
+
+    /* Safe default */
+    return 10;
+}
+
+
+/* =========================================================
+   4. TRADING JOURNAL - ADD TRADE
+   ========================================================= */
 
 function addTrade() {
 
-    const pairElement =
-        document.getElementById("journal-pair");
+    const pair = getValue("journal-pair");
 
     const tradeTypeElement =
         document.getElementById("trade-type");
 
-    const entryElement =
-        document.getElementById("entry-price");
+    const tradeType =
+        tradeTypeElement
+            ? tradeTypeElement.value
+            : "Buy";
 
-    const stopElement =
-        document.getElementById("journal-stop");
 
-    const takeProfitElement =
-        document.getElementById("take-profit");
+    const entry = getValue("entry-price");
 
-    const lotElement =
-        document.getElementById("journal-lot");
+    const stopLoss = getValue("journal-stop");
+
+    const takeProfit = getValue("take-profit");
+
+    const lotSize = getValue("journal-lot");
 
     const resultElement =
         document.getElementById("trade-result");
 
-    const notesElement =
-        document.getElementById("trade-notes");
+    const tradeResult =
+        resultElement
+            ? resultElement.value
+            : "Pending";
 
 
-    // Check that the journal exists
-    if (
-        !pairElement ||
-        !tradeTypeElement ||
-        !entryElement ||
-        !stopElement ||
-        !takeProfitElement ||
-        !lotElement ||
-        !resultElement ||
-        !notesElement
-    ) {
-
-        alert(
-            "Trading Journal could not be found. Please check your HTML."
-        );
-
-        return;
-    }
+    const notes = getValue("trade-notes");
 
 
-    const pair = pairElement.value;
-    const tradeType = tradeTypeElement.value;
-    const entry = entryElement.value.trim();
-    const stopLoss = stopElement.value.trim();
-    const takeProfit = takeProfitElement.value.trim();
-    const lotSize = lotElement.value.trim();
-    const tradeResult = resultElement.value;
-    const notes = notesElement.value.trim();
+    /* Check required fields */
 
-
-    // Validate required fields
     if (
         entry === "" ||
         stopLoss === "" ||
@@ -198,8 +340,11 @@ function addTrade() {
     }
 
 
-    // Create trade
+    /* Create trade */
+
     const trade = {
+
+        id: Date.now(),
 
         pair: pair,
 
@@ -222,176 +367,253 @@ function addTrade() {
     };
 
 
-    // Get existing trades
-    let trades =
-        JSON.parse(
-            localStorage.getItem("sifTrades")
-        ) || [];
+    /* Get existing trades */
+
+    const trades = getTrades();
 
 
-    // Add new trade
+    /* Add new trade */
+
     trades.push(trade);
 
 
-    // Save trades
-    localStorage.setItem(
-        "sifTrades",
-        JSON.stringify(trades)
-    );
+    /* Save */
+
+    saveTrades(trades);
 
 
-    // Update page
+    /* Refresh journal */
+
     displayTrades();
 
     updateTradingStats();
 
 
-    // Clear input fields
-    entryElement.value = "";
+    /* Clear inputs */
 
-    stopElement.value = "";
-
-    takeProfitElement.value = "";
-
-    lotElement.value = "";
-
-    notesElement.value = "";
+    clearTradeInputs();
 
 
     alert("Trade saved successfully! 📒");
-
 }
 
 
-// ========================================
-// DISPLAY SAVED TRADES
-// ========================================
+/* =========================================================
+   5. DISPLAY TRADES
+   ========================================================= */
 
 function displayTrades() {
 
-    const journalResults =
+    const resultsBox =
         document.getElementById("journal-results");
 
 
-    if (!journalResults) {
+    if (!resultsBox) {
         return;
     }
 
 
-    const trades =
-        JSON.parse(
-            localStorage.getItem("sifTrades")
-        ) || [];
+    const trades = getTrades();
 
 
-    // No trades
+    /* No trades */
+
     if (trades.length === 0) {
 
-        journalResults.innerHTML = `
-            <p>No trades recorded yet.</p>
+        resultsBox.innerHTML = `
+            <div class="no-trades">
+                <p>📒 No trades recorded yet.</p>
+                <p>Your saved trades will appear here.</p>
+            </div>
         `;
 
         return;
     }
 
 
-    journalResults.innerHTML = `
-        <h2>📋 Your Trade History</h2>
-    `;
+    /* Display newest trade first */
+
+    const reversedTrades = [...trades].reverse();
 
 
-    trades.forEach(function(trade, index) {
+    resultsBox.innerHTML = reversedTrades.map(trade => {
 
-        const cleanPair =
-            String(trade.pair).replace("/", "");
+        return `
+            <div class="trade-card">
 
-
-        const pairName =
-            cleanPair.length >= 6
-                ? cleanPair.slice(0, 3) +
-                  "/" +
-                  cleanPair.slice(3)
-                : trade.pair;
-
-
-        journalResults.innerHTML += `
-
-            <div class="trade-card"> </div>
-            
-            <button onclick="deleteTrade(${index})">
-    🗑️ Delete Trade
-</button>
-
-<small>
-    ${trade.date}
-</small>
-
-<button onclick="deleteTrade(${index})">
-    🗑️ Delete Trade
-</button>
-
-</div>
                 <h3>
-                    ${pairName}
+                    ${escapeHTML(trade.pair)}
+                    -
+                    ${escapeHTML(trade.tradeType)}
                 </h3>
 
                 <p>
-                    <strong>Trade:</strong>
-                    ${trade.tradeType}
-                </p>
-
-                <p>
                     <strong>Entry:</strong>
-                    ${trade.entry}
+                    ${escapeHTML(trade.entry)}
                 </p>
 
                 <p>
                     <strong>Stop Loss:</strong>
-                    ${trade.stopLoss}
+                    ${escapeHTML(trade.stopLoss)}
                 </p>
 
                 <p>
                     <strong>Take Profit:</strong>
-                    ${trade.takeProfit}
+                    ${escapeHTML(trade.takeProfit)}
                 </p>
 
                 <p>
                     <strong>Lot Size:</strong>
-                    ${trade.lotSize}
+                    ${escapeHTML(trade.lotSize)}
                 </p>
 
                 <p>
                     <strong>Result:</strong>
-                    ${trade.tradeResult}
+                    ${escapeHTML(trade.tradeResult)}
                 </p>
 
                 <p>
                     <strong>Notes:</strong>
-                    ${trade.notes}
+                    ${escapeHTML(trade.notes)}
                 </p>
 
                 <small>
-                    ${trade.date}
+                    ${escapeHTML(trade.date)}
                 </small>
 
+                <br><br>
+
+                <button
+                    onclick="deleteTrade(${trade.id})"
+                    class="delete-trade"
+                >
+                    🗑️ Delete Trade
+                </button>
+
             </div>
-
         `;
-    });
 
+    }).join("");
 }
 
 
-// ========================================
-// PERFORMANCE DASHBOARD
-// ========================================
+/* =========================================================
+   6. DELETE ONE TRADE
+   ========================================================= */
+
+function deleteTrade(id) {
+
+    const confirmed =
+        confirm("Are you sure you want to delete this trade?");
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    let trades = getTrades();
+
+
+    trades = trades.filter(
+        trade => trade.id !== id
+    );
+
+
+    saveTrades(trades);
+
+
+    displayTrades();
+
+    updateTradingStats();
+}
+
+
+/* =========================================================
+   7. CLEAR ALL TRADES
+   ========================================================= */
+
+function clearJournal() {
+
+    const trades = getTrades();
+
+
+    if (trades.length === 0) {
+
+        alert("There are no trades to clear.");
+
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "⚠️ Are you sure you want to delete ALL trades?\n\nThis action cannot be undone."
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    /* Remove saved trades */
+
+    localStorage.removeItem("sifTrades");
+
+
+    /* Refresh journal */
+
+    displayTrades();
+
+    updateTradingStats();
+
+
+    alert("All trades have been cleared. 🗑️");
+}
+
+
+/* =========================================================
+   8. CLEAR JOURNAL INPUTS
+   ========================================================= */
+
+function clearTradeInputs() {
+
+    const ids = [
+
+        "entry-price",
+
+        "journal-stop",
+
+        "take-profit",
+
+        "journal-lot",
+
+        "trade-notes"
+
+    ];
+
+
+    ids.forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            element.value = "";
+        }
+
+    });
+}
+
+
+/* =========================================================
+   9. TRADING STATISTICS
+   ========================================================= */
 
 function updateTradingStats() {
 
-    const trades =
-        JSON.parse(
-            localStorage.getItem("sifTrades")
-        ) || [];
+    const trades = getTrades();
 
 
     const totalTrades =
@@ -399,27 +621,24 @@ function updateTradingStats() {
 
 
     const wins =
-        trades.filter(function(trade) {
-
-            return trade.tradeResult === "Win";
-
-        }).length;
+        trades.filter(
+            trade =>
+                trade.tradeResult === "Win"
+        ).length;
 
 
     const losses =
-        trades.filter(function(trade) {
-
-            return trade.tradeResult === "Loss";
-
-        }).length;
+        trades.filter(
+            trade =>
+                trade.tradeResult === "Loss"
+        ).length;
 
 
     const breakEven =
-        trades.filter(function(trade) {
-
-            return trade.tradeResult === "Break Even";
-
-        }).length;
+        trades.filter(
+            trade =>
+                trade.tradeResult === "Break Even"
+        ).length;
 
 
     let winRate = 0;
@@ -433,53 +652,46 @@ function updateTradingStats() {
     }
 
 
-    const totalTradesElement =
+    /* Update dashboard */
+
+    const totalElement =
         document.getElementById("total-trades");
 
-    const totalWinsElement =
+    if (totalElement) {
+        totalElement.textContent =
+            totalTrades;
+    }
+
+
+    const winsElement =
         document.getElementById("total-wins");
 
-    const totalLossesElement =
+    if (winsElement) {
+        winsElement.textContent =
+            wins;
+    }
+
+
+    const lossesElement =
         document.getElementById("total-losses");
 
-    const totalBreakEvenElement =
+    if (lossesElement) {
+        lossesElement.textContent =
+            losses;
+    }
+
+
+    const breakEvenElement =
         document.getElementById("total-break-even");
+
+    if (breakEvenElement) {
+        breakEvenElement.textContent =
+            breakEven;
+    }
+
 
     const winRateElement =
         document.getElementById("win-rate");
-
-
-    if (totalTradesElement) {
-
-        totalTradesElement.textContent =
-            totalTrades;
-
-    }
-
-
-    if (totalWinsElement) {
-
-        totalWinsElement.textContent =
-            wins;
-
-    }
-
-
-    if (totalLossesElement) {
-
-        totalLossesElement.textContent =
-            losses;
-
-    }
-
-
-    if (totalBreakEvenElement) {
-
-        totalBreakEvenElement.textContent =
-            breakEven;
-
-    }
-
 
     if (winRateElement) {
 
@@ -487,101 +699,81 @@ function updateTradingStats() {
             winRate.toFixed(1) + "%";
 
     }
-
 }
 
 
-// ========================================
-// LOAD JOURNAL WHEN PAGE OPENS
-// ========================================
-function deleteTrade(index) {
+/* =========================================================
+   10. ESCAPE HTML
+   ========================================================= */
 
-    const confirmDelete = confirm(
-        "Are you sure you want to delete this trade?"
-    );
+function escapeHTML(value) {
 
-    if (!confirmDelete) {
-        return;
+    if (value === null || value === undefined) {
+        return "";
     }
 
-    let trades =
-        JSON.parse(
-            localStorage.getItem("sifTrades")
-        ) || [];
 
-    trades.splice(index, 1);
+    return String(value)
 
-    localStorage.setItem(
-        "sifTrades",
-        JSON.stringify(trades)
-    );
+        .replace(/&/g, "&amp;")
 
-    displayTrades();
+        .replace(/</g, "&lt;")
 
-    updateTradingStats();
+        .replace(/>/g, "&gt;")
 
-    alert("Trade deleted successfully.");
-    document.addEventListener(
-        function clearJournal() {
+        .replace(/"/g, "&quot;")
 
-    const confirmClear = confirm(
-        "Are you sure you want to delete ALL your saved trades?"
-    );
-
-    if (!confirmClear) {
-        return;
-    }
-
-    localStorage.removeItem("sifTrades");
-
-    displayTrades();
-    updateTradingStats();
-
-    alert("All trades have been cleared.");
-        }
-    function clearJournal() {
-
-    const confirmClear = confirm(
-        "Are you sure you want to delete ALL your saved trades?"
-    );
-
-    if (!confirmClear) {
-        return;
-    }
-
-    localStorage.removeItem("sifTrades");
-
-    displayTrades();
-
-    updateTradingStats();
-
-    alert("All trades have been cleared.");
-    }
+        .replace(/'/g, "&#039;");
 }
+
+
+/* =========================================================
+   11. INITIALIZE WEBSITE
+   ========================================================= */
+
 document.addEventListener(
-    function clearJournal() {
-
-    const confirmClear = confirm(
-        "Are you sure you want to delete ALL your saved trades?"
-    );
-
-    if (!confirmClear) {
-        return;
-    }
-
-    localStorage.removeItem("sifTrades");
-
-    displayTrades();
-    updateTradingStats();
-
-    alert("All trades have been cleared.");
-    }
     "DOMContentLoaded",
-    function() {
+    function () {
+
+        console.log("SIF FOREX HUB JavaScript loaded successfully.");
+
+
+        /* Load saved trades */
 
         displayTrades();
+
+
+        /* Update dashboard */
 
         updateTradingStats();
 
     }
 );
+
+
+/* =========================================================
+   12. MAKE FUNCTIONS AVAILABLE TO HTML ONCLICK
+   ========================================================= */
+
+window.calculateRisk =
+    calculateRisk;
+
+window.addTrade =
+    addTrade;
+
+window.deleteTrade =
+    deleteTrade;
+
+window.clearJournal =
+    clearJournal;
+
+window.displayTrades =
+    displayTrades;
+
+window.updateTradingStats =
+    updateTradingStats;
+
+
+/* =========================================================
+   END OF SCRIPT
+   ========================================================= */
