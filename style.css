@@ -253,3 +253,79 @@ section > h2 {
         line-height: 1.7;
     }
 }
+/* Risk Calculator */
+
+#risk-calculator {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#risk-calculator > p {
+    text-align: center;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+}
+
+.calculator {
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #334155;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.calculator label {
+    display: block;
+    color: white;
+    font-weight: 700;
+    margin-bottom: 8px;
+    margin-top: 18px;
+}
+
+.calculator label:first-child {
+    margin-top: 0;
+}
+
+.calculator input {
+    width: 100%;
+    padding: 14px;
+    background-color: #0f172a;
+    color: white;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.calculator input:focus {
+    border-color: #22c55e;
+}
+
+.calculator button {
+    width: 100%;
+    margin-top: 25px;
+}
+
+#risk-result {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #0f172a;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#risk-result h3 {
+    color: #38bdf8;
+    margin-bottom: 10px;
+}
+
+#risk-result h2 {
+    color: #22c55e;
+    margin-top: 15px;
+    font-size: 25px;
+}
+
+#risk-result p {
+    color: #cbd5e1;
+    margin: 5px 0;
+}
