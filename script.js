@@ -163,45 +163,90 @@ function addTrade() {
     const tradeResult = document.getElementById("trade-result").value;
     const notes = document.getElementById("trade-notes").value;
 
-    const journalResults = document.getElementById("journal-results");
-
     if (
         entry === "" ||
         stopLoss === "" ||
         takeProfit === "" ||
         lotSize === ""
     ) {
-        journalResults.innerHTML = `
-            <p>Please fill in all required trade information.</p>
-        `;
+        alert("Please fill in all required trade information.");
         return;
     }
 
-    journalResults.innerHTML += `
-        <div class="trade-card">
+    const trade = {
+        pair: pair,
+        tradeType: tradeType,
+        entry: entry,
+        stopLoss: stopLoss,
+        takeProfit: takeProfit,
+        lotSize: lotSize,
+        tradeResult: tradeResult,
+        notes: notes || "No notes added.",
+        date: new Date().toLocaleString()
+    };
 
-            <h3>${pair.slice(0, 3)}/${pair.slice(3)}</h3>
+    let trades = JSON.parse(localStorage.getItem("sifTrades")) || [];
 
-            <p><strong>Trade:</strong> ${tradeType}</p>
+    trades.push(trade);
 
-            <p><strong>Entry:</strong> ${entry}</p>
+    localStorage.setItem("sifTrades", JSON.stringify(trades));
 
-            <p><strong>Stop Loss:</strong> ${stopLoss}</p>
-
-            <p><strong>Take Profit:</strong> ${takeProfit}</p>
-
-            <p><strong>Lot Size:</strong> ${lotSize}</p>
-
-            <p><strong>Result:</strong> ${tradeResult}</p>
-
-            <p><strong>Notes:</strong> ${notes || "No notes added."}</p>
-
-        </div>
-    `;
+    displayTrades();
 
     document.getElementById("entry-price").value = "";
     document.getElementById("journal-stop").value = "";
     document.getElementById("take-profit").value = "";
     document.getElementById("journal-lot").value = "";
     document.getElementById("trade-notes").value = "";
+
+    alert("Trade saved successfully! 📒");
+}
+function displayTrades() {
+
+    const journalResults = document.getElementById("journal-results");
+
+    const trades =
+        JSON.parse(localStorage.getItem("sifTrades")) || [];
+
+    if (trades.length === 0) {
+
+        journalResults.innerHTML = `
+            <p>No trades recorded yet.</p>
+        `;
+
+        return;
+    }
+
+    journalResults.innerHTML = `
+        <h2>📋 Your Trade History</h2>
+    `;
+
+    trades.forEach((trade, index) => {
+
+        journalResults.innerHTML += `
+            <div class="trade-card">
+
+                <h3>
+                    ${trade.pair.slice(0, 3)}/${trade.pair.slice(3)}
+                </h3>
+
+                <p><strong>Trade:</strong> ${trade.tradeType}</p>
+
+                <p><strong>Entry:</strong> ${trade.entry}</p>
+
+                <p><strong>Stop Loss:</strong> ${trade.stopLoss}</p>
+
+                <p><strong>Take Profit:</strong> ${trade.takeProfit}</p>
+
+                <p><strong>Lot Size:</strong> ${trade.lotSize}</p>
+
+                <p><strong>Result:</strong> ${trade.tradeResult}</p>
+
+                <p><strong>Notes:</strong> ${trade.notes}</p>
+
+                <small>${trade.date}</small>
+
+            </div>
+        `;
+    });
 }
