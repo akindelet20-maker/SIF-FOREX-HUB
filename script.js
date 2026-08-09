@@ -114,19 +114,8 @@ function calculateRisk() {
 
     const riskAmount = balance * (risk / 100);
 
-    let pipSize;
+    let pipSize = pair.includes("JPY") ? 0.01 : 0.0001;
 
-    // JPY pairs use 0.01 pip size.
-    if (pair.includes("JPY")) {
-        pipSize = 0.01;
-    } else {
-        pipSize = 0.0001;
-    }
-
-    /*
-     * Approximate pip value for 1 standard lot
-     * when USD is the quote currency.
-     */
     let pipValue;
 
     if (
@@ -136,25 +125,7 @@ function calculateRisk() {
         pair === "NZDUSD"
     ) {
         pipValue = 10;
-    }
-
-    /*
-     * For USD/JPY, USD/CHF and USD/CAD,
-     * convert the pip value using the entered price.
-     */
-    else if (
-        pair === "USDJPY" ||
-        pair === "USDCHF" ||
-        pair === "USDCAD"
-    ) {
-        pipValue = (pipSize * 100000) / price;
-    }
-
-    /*
-     * For other cross pairs, this first version
-     * uses an approximation based on the entered price.
-     */
-    else {
+    } else {
         pipValue = (pipSize * 100000) / price;
     }
 
@@ -176,8 +147,8 @@ function calculateRisk() {
         <h2>Estimated Lot Size: ${lotSize.toFixed(3)}</h2>
 
         <p>
-            This is an estimate. Always verify pip value,
-            contract size, and broker specifications before trading.
+            Always verify the result with your broker's
+            contract and pip-value specifications.
         </p>
     `;
 }
