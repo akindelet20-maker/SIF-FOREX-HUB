@@ -230,7 +230,258 @@
         <!-- calculator code here -->
 
     </section>
+    <section id="trading-journal">
 
+    <h2>📒 Trading Journal</h2>
+
+    <p>
+        Record your trades and track your trading progress.
+    </p>
+
+    <div class="journal-form">
+
+        <label for="journal-pair">Currency Pair</label>
+
+        <select id="journal-pair">
+
+            <option value="EURUSD">EUR/USD</option>
+            <option value="GBPUSD">GBP/USD</option>
+            <option value="USDJPY">USD/JPY</option>
+            <option value="USDCHF">USD/CHF</option>
+            <option value="USDCAD">USD/CAD</option>
+            <option value="AUDUSD">AUD/USD</option>
+            <option value="NZDUSD">NZD/USD</option>
+
+            <option value="EURGBP">EUR/GBP</option>
+            <option value="EURJPY">EUR/JPY</option>
+            <option value="EURCHF">EUR/CHF</option>
+            <option value="EURAUD">EUR/AUD</option>
+            <option value="EURNZD">EUR/NZD</option>
+            <option value="EURCAD">EUR/CAD</option>
+
+            <option value="GBPJPY">GBP/JPY</option>
+            <option value="GBPCHF">GBP/CHF</option>
+            <option value="GBPAUD">GBP/AUD</option>
+            <option value="GBPNZD">GBP/NZD</option>
+            <option value="GBPCAD">GBP/CAD</option>
+
+            <option value="CHFJPY">CHF/JPY</option>
+            <option value="CADJPY">CAD/JPY</option>
+            <option value="AUDJPY">AUD/JPY</option>
+            <option value="NZDJPY">NZD/JPY</option>
+
+            <option value="AUDCAD">AUD/CAD</option>
+            <option value="AUDCHF">AUD/CHF</option>
+            <option value="AUDNZD">AUD/NZD</option>
+
+            <option value="CADCHF">CAD/CHF</option>
+            <option value="NZDCAD">NZD/CAD</option>
+            <option value="NZDCHF">NZD/CHF</option>
+
+        </select>
+
+
+        <label for="trade-type">Trade Type</label>
+
+        <select id="trade-type">
+            <option value="Buy">Buy</option>
+            <option value="Sell">Sell</option>
+        </select>
+
+
+        <label for="entry-price">Entry Price</label>
+
+        <input
+            type="number"
+            id="entry-price"
+            placeholder="Example: 1.08500"
+            step="0.00001"
+        >
+
+
+        <label for="journal-stop">Stop Loss</label>
+
+        <input
+            type="number"
+            id="journal-stop"
+            placeholder="Example: 1.08000"
+            step="0.00001"
+        >
+
+
+        <label for="take-profit">Take Profit</label>
+
+        <input
+            type="number"
+            id="take-profit"
+            placeholder="Example: 1.09500"
+            step="0.00001"
+        >
+
+
+        <label for="journal-lot">Lot Size</label>
+
+        <input
+            type="number"
+            id="journal-lot"
+            placeholder="Example: 0.01"
+            step="0.001"
+        >
+
+
+        <label for="trade-result">Trade Result</label>
+
+        <select id="trade-result">
+            <option value="Win">✅ Win</option>
+            <option value="Loss">❌ Loss</option>
+            <option value="Break Even">⚖️ Break Even</option>
+        </select>
+
+
+        <label for="trade-notes">Trading Notes</label>
+
+        <textarea
+            id="trade-notes"
+            placeholder="Write what you learned from this trade..."
+        ></textarea>
+
+
+        <button onclick="addTrade()">
+            Add Trade
+        </button>
+
+    </div>
+
+
+    <div id="journal-results"></div>
+
+    </section>  
+<section id="trading-journal">
+
+    <h2>📒 Trading Journal</h2>
+
+    <p>
+        Record your trades and track your trading progress.
+    </p>
+
+    <div class="journal-form">
+
+        <label for="journal-pair">Currency Pair</label>
+
+        <select id="journal-pair">
+
+            <option value="EURUSD">EUR/USD</option>
+            <option value="GBPUSD">GBP/USD</option>
+            <option value="USDJPY">USD/JPY</option>
+            <option value="USDCHF">USD/CHF</option>
+            <option value="USDCAD">USD/CAD</option>
+            <option value="AUDUSD">AUD/USD</option>
+            <option value="NZDUSD">NZD/USD</option>
+
+            <option value="EURGBP">EUR/GBP</option>
+            <option value="EURJPY">EUR/JPY</option>
+            <option value="EURCHF">EUR/CHF</option>
+            <option value="EURAUD">EUR/AUD</option>
+            <option value="EURNZD">EUR/NZD</option>
+            <option value="EURCAD">EUR/CAD</option>
+
+            <option value="GBPJPY">GBP/JPY</option>
+            <option value="GBPCHF">GBP/CHF</option>
+            <option value="GBPAUD">GBP/AUD</option>
+            <option value="GBPNZD">GBP/NZD</option>
+            <option value="GBPCAD">GBP/CAD</option>
+
+            <option value="CHFJPY">CHF/JPY</option>
+            <option value="CADJPY">CAD/JPY</option>
+            <option value="AUDJPY">AUD/JPY</option>
+            <option value="NZDJPY">NZD/JPY</option>
+
+            <option value="AUDCAD">AUD/CAD</option>
+            <option value="AUDCHF">AUD/CHF</option>
+            <option value="AUDNZD">AUD/NZD</option>
+
+            <option value="CADCHF">CAD/CHF</option>
+            <option value="NZDCAD">NZD/CAD</option>
+            <option value="NZDCHF">NZD/CHF</option>
+
+        </select>
+
+
+        <label for="trade-type">Trade Type</label>
+
+        <select id="trade-type">
+            <option value="Buy">Buy</option>
+            <option value="Sell">Sell</option>
+        </select>
+
+
+        <label for="entry-price">Entry Price</label>
+
+        <input
+            type="number"
+            id="entry-price"
+            placeholder="Example: 1.08500"
+            step="0.00001"
+        >
+
+
+        <label for="journal-stop">Stop Loss</label>
+
+        <input
+            type="number"
+            id="journal-stop"
+            placeholder="Example: 1.08000"
+            step="0.00001"
+        >
+
+
+        <label for="take-profit">Take Profit</label>
+
+        <input
+            type="number"
+            id="take-profit"
+            placeholder="Example: 1.09500"
+            step="0.00001"
+        >
+
+
+        <label for="journal-lot">Lot Size</label>
+
+        <input
+            type="number"
+            id="journal-lot"
+            placeholder="Example: 0.01"
+            step="0.001"
+        >
+
+
+        <label for="trade-result">Trade Result</label>
+
+        <select id="trade-result">
+            <option value="Win">✅ Win</option>
+            <option value="Loss">❌ Loss</option>
+            <option value="Break Even">⚖️ Break Even</option>
+        </select>
+
+
+        <label for="trade-notes">Trading Notes</label>
+
+        <textarea
+            id="trade-notes"
+            placeholder="Write what you learned from this trade..."
+        ></textarea>
+
+
+        <button onclick="addTrade()">
+            Add Trade
+        </button>
+
+    </div>
+
+
+    <div id="journal-results"></div>
+
+</section>
     <script src="script.js"></script>
 
 </body>
