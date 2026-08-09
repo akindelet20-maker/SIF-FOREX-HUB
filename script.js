@@ -385,23 +385,6 @@ function addTrade() {
     /* Refresh journal */
 
     displayTrades();
-   <div class="trade-actions">
-
-    <button
-        onclick="editTrade(${trade.id})"
-        class="edit-trade"
-    >
-        ✏️ Edit Trade
-    </button>
-
-    <button
-        onclick="deleteTrade(${trade.id})"
-        class="delete-trade"
-    >
-        🗑️ Delete Trade
-    </button>
-
-</div>
 
     updateTradingStats();
 
@@ -778,8 +761,6 @@ window.calculateRisk =
 window.addTrade =
     addTrade;
 
-window.editTrade = editTrade;
-
 window.deleteTrade =
     deleteTrade;
 
@@ -791,65 +772,6 @@ window.displayTrades =
 
 window.updateTradingStats =
     updateTradingStats;
-function editTrade(id) {
-
-    let trades = getTrades();
-
-    const tradeIndex = trades.findIndex(
-        trade => trade.id === id
-    );
-
-    if (tradeIndex === -1) {
-        alert("Trade not found.");
-        return;
-    }
-
-    const trade = trades[tradeIndex];
-
-    const pair = document.getElementById("journal-pair");
-    const tradeType = document.getElementById("trade-type");
-    const entry = document.getElementById("entry-price");
-    const stop = document.getElementById("journal-stop");
-    const takeProfit = document.getElementById("take-profit");
-    const lot = document.getElementById("journal-lot");
-    const result = document.getElementById("trade-result");
-    const notes = document.getElementById("trade-notes");
-
-    if (pair) pair.value = trade.pair || "";
-    if (tradeType) tradeType.value = trade.tradeType || "";
-    if (entry) entry.value = trade.entry || "";
-    if (stop) stop.value = trade.stopLoss || "";
-    if (takeProfit) takeProfit.value = trade.takeProfit || "";
-    if (lot) lot.value = trade.lotSize || "";
-    if (result) result.value = trade.tradeResult || "";
-    if (notes) notes.value = trade.notes || "";
-
-    /*
-       Remove the old copy temporarily.
-       When you press Add Trade, the edited version
-       will be saved as a new trade.
-    */
-    trades.splice(tradeIndex, 1);
-
-    saveTrades(trades);
-
-    displayTrades();
-    updateTradingStats();
-
-    const journal =
-        document.getElementById("trading-journal");
-
-    if (journal) {
-        journal.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    }
-
-    alert(
-        "Trade loaded for editing. Make your changes and tap Add Trade."
-    );
-}
 
 
 /* =========================================================
