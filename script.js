@@ -854,6 +854,534 @@ window.startLearning = startLearning;
 window.startBeginner = startBeginner;
 window.startIntermediate = startIntermediate;
 window.startAdvanced = startAdvanced;
+
+/* =========================================================
+   SIF FOREX HUB - LEARNING CENTER
+   ========================================================= */
+
+const beginnerLessons = [
+
+    {
+        title: "📘 Lesson 1: What is Forex?",
+        content: `
+            <p>
+                <strong>Forex</strong> means Foreign Exchange.
+                It is the global market where currencies are
+                bought and sold against each other.
+            </p>
+
+            <p>
+                For example, when you trade EUR/USD, you are
+                trading the Euro against the US Dollar.
+            </p>
+
+            <h4>Key idea:</h4>
+
+            <p>
+                Forex trading is about speculating whether one
+                currency will become stronger or weaker compared
+                with another currency.
+            </p>
+
+            <div class="lesson-tip">
+                💡 <strong>Remember:</strong>
+                Forex is always traded in pairs.
+            </div>
+        `
+    },
+
+    {
+        title: "💱 Lesson 2: Currency Pairs",
+        content: `
+            <p>
+                A currency pair contains two currencies.
+            </p>
+
+            <p>
+                Example:
+                <strong>EUR/USD</strong>
+            </p>
+
+            <p>
+                EUR is the <strong>base currency</strong>.
+                USD is the <strong>quote currency</strong>.
+            </p>
+
+            <p>
+                If EUR/USD rises, it generally means the Euro
+                is gaining value relative to the Dollar.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Always know which currency is the base currency
+                and which is the quote currency.
+            </div>
+        `
+    },
+
+    {
+        title: "🌍 Lesson 3: Major, Minor & Exotic Pairs",
+        content: `
+            <h4>Major Pairs</h4>
+
+            <p>
+                Major pairs contain the US Dollar and are among
+                the most actively traded Forex pairs.
+            </p>
+
+            <p>
+                Examples: EUR/USD, GBP/USD, USD/JPY.
+            </p>
+
+            <h4>Minor Pairs</h4>
+
+            <p>
+                Minor pairs usually involve major currencies but
+                do not contain the US Dollar.
+            </p>
+
+            <p>
+                Examples: EUR/GBP, GBP/JPY, EUR/AUD.
+            </p>
+
+            <h4>Exotic Pairs</h4>
+
+            <p>
+                Exotic pairs combine a major currency with a
+                currency from an emerging or smaller economy.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Major pairs generally have better liquidity
+                and tighter spreads.
+            </div>
+        `
+    },
+
+    {
+        title: "📏 Lesson 4: What is a Pip?",
+        content: `
+            <p>
+                A <strong>pip</strong> is a standard unit used
+                to measure movement in a Forex pair.
+            </p>
+
+            <p>
+                For most major currency pairs, one pip is
+                represented by the fourth decimal place.
+            </p>
+
+            <p>
+                Example:
+                <strong>EUR/USD 1.1000 → 1.1010</strong>
+            </p>
+
+            <p>
+                This is a movement of approximately
+                <strong>10 pips</strong>.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Pips help traders measure price movement,
+                stop-loss distance and potential profit or loss.
+            </div>
+        `
+    },
+
+    {
+        title: "📦 Lesson 5: What is Lot Size?",
+        content: `
+            <p>
+                Lot size determines how large your Forex trade is.
+            </p>
+
+            <h4>Common lot sizes:</h4>
+
+            <ul>
+                <li>1.00 lot = Standard lot</li>
+                <li>0.10 lot = Mini lot</li>
+                <li>0.01 lot = Micro lot</li>
+            </ul>
+
+            <p>
+                Larger lot sizes generally mean larger potential
+                profits and larger potential losses.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Your lot size should be based on your account
+                size, risk percentage and stop-loss distance.
+            </div>
+        `
+    },
+
+    {
+        title: "💰 Lesson 6: What is Spread?",
+        content: `
+            <p>
+                The <strong>spread</strong> is the difference between
+                the bid price and the ask price.
+            </p>
+
+            <p>
+                It is one of the costs traders may pay when entering
+                a Forex position.
+            </p>
+
+            <p>
+                For example, if EUR/USD has a bid of 1.1000 and
+                an ask of 1.1002, the spread is 2 pips.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Lower spreads can reduce trading costs,
+                especially for short-term traders.
+            </div>
+        `
+    },
+
+    {
+        title: "⚡ Lesson 7: What is Leverage?",
+        content: `
+            <p>
+                <strong>Leverage</strong> allows a trader to control
+                a larger position using a smaller amount of capital.
+            </p>
+
+            <p>
+                For example, leverage of 1:100 means the broker may
+                allow you to control a position much larger than
+                your deposited margin.
+            </p>
+
+            <p>
+                However, leverage does not remove risk.
+                Larger positions can produce larger losses.
+            </p>
+
+            <div class="lesson-warning">
+                ⚠️ High leverage can magnify losses as well as profits.
+                Always use proper risk management.
+            </div>
+        `
+    },
+
+    {
+        title: "🛑 Lesson 8: Stop Loss & Take Profit",
+        content: `
+            <h4>Stop Loss</h4>
+
+            <p>
+                A Stop Loss is an order designed to limit your loss
+                if the market moves against your trade.
+            </p>
+
+            <h4>Take Profit</h4>
+
+            <p>
+                A Take Profit is an order designed to close your
+                trade when your chosen profit target is reached.
+            </p>
+
+            <p>
+                Example:
+            </p>
+
+            <ul>
+                <li>Entry: 1.1000</li>
+                <li>Stop Loss: 1.0950</li>
+                <li>Take Profit: 1.1100</li>
+            </ul>
+
+            <div class="lesson-tip">
+                💡 Know your exit levels before entering the trade.
+            </div>
+        `
+    },
+
+    {
+        title: "🛡️ Lesson 9: Risk Management",
+        content: `
+            <p>
+                Risk management is one of the most important
+                skills in Forex trading.
+            </p>
+
+            <p>
+                A common approach is to risk only a small percentage
+                of your account on each trade.
+            </p>
+
+            <h4>Example:</h4>
+
+            <p>
+                Account balance: <strong>$500</strong>
+            </p>
+
+            <p>
+                Risk: <strong>1%</strong>
+            </p>
+
+            <p>
+                Maximum planned risk: <strong>$5</strong>
+            </p>
+
+            <div class="lesson-warning">
+                ⚠️ Never choose a lot size simply because you want
+                to make more money. Calculate your risk first.
+            </div>
+        `
+    },
+
+    {
+        title: "🕐 Lesson 10: Forex Trading Sessions",
+        content: `
+            <p>
+                The Forex market operates around the clock during
+                the trading week, with major financial centers
+                creating different trading sessions.
+            </p>
+
+            <h4>Major sessions:</h4>
+
+            <ul>
+                <li>🇦🇺 Sydney</li>
+                <li>🇯🇵 Tokyo</li>
+                <li>🇬🇧 London</li>
+                <li>🇺🇸 New York</li>
+            </ul>
+
+            <p>
+                London and New York are particularly important
+                sessions for many Forex traders because of their
+                high market activity and liquidity.
+            </p>
+
+            <div class="lesson-tip">
+                💡 Learn when your preferred currency pairs are
+                most active before choosing your trading time.
+            </div>
+        `
+    }
+
+];
+
+
+let currentLesson = 0;
+
+
+/* =========================================================
+   OPEN BEGINNER COURSE
+   ========================================================= */
+
+function openBeginnerCourse() {
+
+    currentLesson = 0;
+
+    const home =
+        document.getElementById("learning-home");
+
+    const course =
+        document.getElementById("learning-course");
+
+    if (!home || !course) {
+        console.error("Learning Center elements not found.");
+        return;
+    }
+
+    home.style.display = "none";
+
+    course.style.display = "block";
+
+    showLesson();
+
+    course.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+
+/* =========================================================
+   SHOW LESSON
+   ========================================================= */
+
+function showLesson() {
+
+    const lesson =
+        beginnerLessons[currentLesson];
+
+    const content =
+        document.getElementById("lesson-content");
+
+    const progress =
+        document.getElementById("lesson-progress");
+
+    if (!lesson || !content || !progress) {
+        return;
+    }
+
+
+    progress.innerHTML = `
+        <div class="lesson-progress">
+            <strong>
+                Lesson ${currentLesson + 1}
+                of ${beginnerLessons.length}
+            </strong>
+
+            <div class="progress-bar">
+                <div
+                    class="progress-fill"
+                    style="width: ${
+                        ((currentLesson + 1) /
+                        beginnerLessons.length) * 100
+                    }%"
+                ></div>
+            </div>
+
+            <small>
+                ${Math.round(
+                    ((currentLesson + 1) /
+                    beginnerLessons.length) * 100
+                )}% Complete
+            </small>
+        </div>
+    `;
+
+
+    content.innerHTML = `
+        <article class="lesson-card">
+
+            <h2>${lesson.title}</h2>
+
+            <div class="lesson-text">
+                ${lesson.content}
+            </div>
+
+        </article>
+    `;
+
+
+    const previous =
+        document.getElementById("previous-lesson");
+
+    const next =
+        document.getElementById("next-lesson");
+
+
+    if (previous) {
+
+        previous.disabled =
+            currentLesson === 0;
+
+    }
+
+
+    if (next) {
+
+        next.textContent =
+            currentLesson ===
+            beginnerLessons.length - 1
+                ? "Finish Course 🎉"
+                : "Next →";
+
+    }
+
+}
+
+
+/* =========================================================
+   NEXT LESSON
+   ========================================================= */
+
+function nextLesson() {
+
+    if (
+        currentLesson <
+        beginnerLessons.length - 1
+    ) {
+
+        currentLesson++;
+
+        showLesson();
+
+    } else {
+
+        alert(
+            "🎉 Congratulations!\n\n" +
+            "You have completed the SIF FOREX HUB Beginner Course!"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVIOUS LESSON
+   ========================================================= */
+
+function previousLesson() {
+
+    if (currentLesson > 0) {
+
+        currentLesson--;
+
+        showLesson();
+
+    }
+
+}
+
+
+/* =========================================================
+   MARK LESSON COMPLETE
+   ========================================================= */
+
+function markLessonComplete() {
+
+    const completed =
+        JSON.parse(
+            localStorage.getItem(
+                "sifCompletedLessons"
+            )
+        ) || [];
+
+
+    if (!completed.includes(currentLesson)) {
+
+        completed.push(currentLesson);
+
+        localStorage.setItem(
+            "sifCompletedLessons",
+            JSON.stringify(completed)
+        );
+
+    }
+
+
+    alert(
+        "✅ Lesson marked as complete!"
+    );
+
+}
+
+
+/* =========================================================
+   MAKE LEARNING FUNCTIONS AVAILABLE
+   ========================================================= */
+
+window.openBeginnerCourse =
+    openBeginnerCourse;
+
+window.nextLesson =
+    nextLesson;
+
+window.previousLesson =
+    previousLesson;
+
+window.markLessonComplete =
+    markLessonComplete;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
