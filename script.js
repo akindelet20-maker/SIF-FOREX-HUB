@@ -316,8 +316,21 @@ function displayTrades() {
 
         journalResults.innerHTML += `
 
-            <div class="trade-card">
+            <div class="trade-card"> </div>
+            
+            <button onclick="deleteTrade(${index})">
+    🗑️ Delete Trade
+</button>
 
+<small>
+    ${trade.date}
+</small>
+
+<button onclick="deleteTrade(${index})">
+    🗑️ Delete Trade
+</button>
+
+</div>
                 <h3>
                     ${pairName}
                 </h3>
@@ -481,7 +494,34 @@ function updateTradingStats() {
 // ========================================
 // LOAD JOURNAL WHEN PAGE OPENS
 // ========================================
+function deleteTrade(index) {
 
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this trade?"
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    let trades =
+        JSON.parse(
+            localStorage.getItem("sifTrades")
+        ) || [];
+
+    trades.splice(index, 1);
+
+    localStorage.setItem(
+        "sifTrades",
+        JSON.stringify(trades)
+    );
+
+    displayTrades();
+
+    updateTradingStats();
+
+    alert("Trade deleted successfully.");
+}
 document.addEventListener(
     "DOMContentLoaded",
     function() {
