@@ -773,7 +773,86 @@ window.displayTrades =
 window.updateTradingStats =
     updateTradingStats;
 
+/* =========================================================
+   12. START LEARNING
+   ========================================================= */
 
+function startLearning() {
+
+    const learningBox =
+        document.getElementById("learning-options");
+
+    if (!learningBox) {
+        return;
+    }
+
+    learningBox.innerHTML = `
+        <div class="learning-options">
+
+            <h3>Choose Your Learning Level</h3>
+
+            <button onclick="startBeginner()">
+                🟢 Beginner
+            </button>
+
+            <button onclick="startIntermediate()">
+                🟡 Intermediate
+            </button>
+
+            <button onclick="startAdvanced()">
+                🔴 Advanced
+            </button>
+
+        </div>
+    `;
+
+    learningBox.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+
+/* Beginner */
+
+function startBeginner() {
+
+    alert(
+        "🟢 Beginner Level\n\n" +
+        "Welcome to SIF FOREX HUB!\n\n" +
+        "You will learn the foundations of Forex and Smart Money Concepts."
+    );
+}
+
+
+/* Intermediate */
+
+function startIntermediate() {
+
+    alert(
+        "🟡 Intermediate Level\n\n" +
+        "You will continue with advanced market structure, liquidity, order blocks and Fair Value Gaps."
+    );
+}
+
+
+/* Advanced */
+
+function startAdvanced() {
+
+    alert(
+        "🔴 Advanced Level\n\n" +
+        "You will study advanced SMC concepts, execution models, risk management and trading psychology."
+    );
+}
+
+
+/* Make functions available to HTML */
+
+window.startLearning = startLearning;
+window.startBeginner = startBeginner;
+window.startIntermediate = startIntermediate;
+window.startAdvanced = startAdvanced;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
