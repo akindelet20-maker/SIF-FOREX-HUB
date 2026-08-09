@@ -776,6 +776,9 @@ window.updateTradingStats =
 /* =========================================================
    12. START LEARNING
    ========================================================= */
+/* =========================================================
+   12. START LEARNING
+   ========================================================= */
 
 function startLearning() {
 
@@ -783,6 +786,7 @@ function startLearning() {
         document.getElementById("learning-options");
 
     if (!learningBox) {
+        console.error("Learning options box not found.");
         return;
     }
 
@@ -791,15 +795,15 @@ function startLearning() {
 
             <h3>Choose Your Learning Level</h3>
 
-            <button onclick="startBeginner()">
+            <button type="button" onclick="startBeginner()">
                 🟢 Beginner
             </button>
 
-            <button onclick="startIntermediate()">
+            <button type="button" onclick="startIntermediate()">
                 🟡 Intermediate
             </button>
 
-            <button onclick="startAdvanced()">
+            <button type="button" onclick="startAdvanced()">
                 🔴 Advanced
             </button>
 
@@ -813,41 +817,38 @@ function startLearning() {
 }
 
 
-/* Beginner */
-
 function startBeginner() {
 
     alert(
         "🟢 Beginner Level\n\n" +
         "Welcome to SIF FOREX HUB!\n\n" +
-        "You will learn the foundations of Forex and Smart Money Concepts."
+        "You will learn Forex fundamentals, " +
+        "market structure, liquidity and basic SMC concepts."
     );
 }
 
-
-/* Intermediate */
 
 function startIntermediate() {
 
     alert(
         "🟡 Intermediate Level\n\n" +
-        "You will continue with advanced market structure, liquidity, order blocks and Fair Value Gaps."
+        "You will learn advanced market structure, " +
+        "liquidity, Order Blocks, Fair Value Gaps and trade execution."
     );
 }
 
-
-/* Advanced */
 
 function startAdvanced() {
 
     alert(
         "🔴 Advanced Level\n\n" +
-        "You will study advanced SMC concepts, execution models, risk management and trading psychology."
+        "You will learn advanced SMC execution, " +
+        "risk management, trading psychology and professional trade planning."
     );
 }
 
 
-/* Make functions available to HTML */
+/* Make learning functions available to HTML */
 
 window.startLearning = startLearning;
 window.startBeginner = startBeginner;
