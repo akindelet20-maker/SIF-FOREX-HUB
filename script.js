@@ -772,6 +772,39 @@ window.displayTrades =
 
 window.updateTradingStats =
     updateTradingStats;
+function editTrade(index) {
+    let trades = JSON.parse(localStorage.getItem("sifTrades")) || [];
+
+    const trade = trades[index];
+
+    if (!trade) {
+        alert("Trade not found.");
+        return;
+    }
+
+    document.getElementById("journal-pair").value = trade.pair || "";
+    document.getElementById("trade-type").value = trade.tradeType || "";
+    document.getElementById("entry-price").value = trade.entry || "";
+    document.getElementById("journal-stop").value = trade.stopLoss || "";
+    document.getElementById("take-profit").value = trade.takeProfit || "";
+    document.getElementById("journal-lot").value = trade.lotSize || "";
+    document.getElementById("trade-result").value = trade.tradeResult || "";
+    document.getElementById("trade-notes").value = trade.notes || "";
+
+    trades.splice(index, 1);
+
+    localStorage.setItem("sifTrades", JSON.stringify(trades));
+
+    displayTrades();
+    updateTradingStats();
+
+    window.scrollTo({
+        top: document.getElementById("trading-journal").offsetTop,
+        behavior: "smooth"
+    });
+
+    alert("Trade loaded for editing. Make your changes and click Add Trade.");
+}
 
 
 /* =========================================================
