@@ -200,8 +200,59 @@ function addTrade() {
     document.getElementById("trade-notes").value = "";
 
     alert("Trade saved successfully! 📒");
-} function displayTrades();
-updateTradingStats(); {
+} function displayTrades() {
+
+    const journalResults =
+        document.getElementById("journal-results");
+
+    const trades =
+        JSON.parse(localStorage.getItem("sifTrades")) || [];
+
+    if (trades.length === 0) {
+
+        journalResults.innerHTML = `
+            <p>No trades recorded yet.</p>
+        `;
+
+        return;
+    }
+
+    journalResults.innerHTML = `
+        <h2>📋 Your Trade History</h2>
+    `;
+
+    trades.forEach((trade) => {
+
+        journalResults.innerHTML += `
+            <div class="trade-card">
+
+                <h3>
+                    ${trade.pair.slice(0, 3)}/${trade.pair.slice(3)}
+                </h3>
+
+                <p><strong>Trade:</strong> ${trade.tradeType}</p>
+
+                <p><strong>Entry:</strong> ${trade.entry}</p>
+
+                <p><strong>Stop Loss:</strong> ${trade.stopLoss}</p>
+
+                <p><strong>Take Profit:</strong> ${trade.takeProfit}</p>
+
+                <p><strong>Lot Size:</strong> ${trade.lotSize}</p>
+
+                <p><strong>Result:</strong> ${trade.tradeResult}</p>
+
+                <p><strong>Notes:</strong> ${trade.notes}</p>
+
+                <small>${trade.date}</small>
+
+            </div>
+        `;
+    });
+}
+
+
+function updateTradingStats() {
 
     const trades =
         JSON.parse(localStorage.getItem("sifTrades")) || [];
@@ -240,7 +291,10 @@ updateTradingStats(); {
 
     document.getElementById("win-rate").textContent =
         winRate.toFixed(1) + "%";
-} displayTrades();
+}
+
+
+displayTrades();
 updateTradingStats();
 
     const journalResults = document.getElementById("journal-results");
