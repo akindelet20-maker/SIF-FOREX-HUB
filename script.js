@@ -1,213 +1,290 @@
-function startLearning() {
-
-    const learningOptions = document.getElementById("learning-options");
-
-    learningOptions.innerHTML = `
-        <h2>Choose Your Learning Level</h2>
-
-        <div>
-            <button onclick="chooseLevel('Beginner')">
-                🟢 Beginner
-            </button>
-
-            <button onclick="chooseLevel('Intermediate')">
-                🔵 Intermediate
-            </button>
-
-            <button onclick="chooseLevel('Advanced')">
-                🔴 Advanced
-            </button>
-        </div>
-
-        <div id="lesson-content"></div>
-    `;
-}
+// ========================================
+// SIF FOREX HUB - MAIN JAVASCRIPT
+// ========================================
 
 
-function chooseLevel(level) {
+// ========================================
+// RISK & LOT SIZE CALCULATOR
+// ========================================
 
-    const lessonContent = document.getElementById("lesson-content");
-
-    if (level === "Beginner") {
-
-        lessonContent.innerHTML = `
-            <h2>🟢 Beginner Forex Course</h2>
-
-            <p>
-                Start your forex journey by learning the
-                fundamental concepts every trader needs.
-            </p>
-
-            <h3>Lessons</h3>
-
-            <ul>
-                <li>What is Forex?</li>
-                <li>Currency Pairs</li>
-                <li>Pips</li>
-                <li>Lot Size</li>
-                <li>Leverage</li>
-                <li>Risk Management</li>
-            </ul>
-        `;
-
-    } else if (level === "Intermediate") {
-
-        lessonContent.innerHTML = `
-            <h2>🔵 Intermediate Forex Course</h2>
-
-            <p>
-                Build your trading knowledge and begin
-                applying structured SMC concepts.
-            </p>
-
-            <h3>Lessons</h3>
-
-            <ul>
-                <li>Market Structure</li>
-                <li>Liquidity</li>
-                <li>Order Blocks</li>
-                <li>Fair Value Gaps</li>
-                <li>Market Structure Shift</li>
-                <li>Risk Management</li>
-            </ul>
-        `;
-
-    } else if (level === "Advanced") {
-
-        lessonContent.innerHTML = `
-            <h2>🔴 Advanced Forex Course</h2>
-
-            <p>
-                Develop a deeper understanding of SMC,
-                trade execution, and professional trading discipline.
-            </p>
-
-            <h3>Lessons</h3>
-
-            <ul>
-                <li>Advanced Market Structure</li>
-                <li>Liquidity Engineering</li>
-                <li>Advanced Order Blocks</li>
-                <li>FVG Entry Models</li>
-                <li>Trade Execution</li>
-                <li>Advanced Risk Management</li>
-            </ul>
-        `;
-    }
-}
 function calculateRisk() {
 
-    const balance = Number(document.getElementById("balance").value);
-    const risk = Number(document.getElementById("risk").value);
-    const stopLoss = Number(document.getElementById("stopLoss").value);
-    const pair = document.getElementById("pair").value;
-    const price = Number(document.getElementById("price").value);
+    const balance = Number(
+        document.getElementById("balance").value
+    );
 
+    const risk = Number(
+        document.getElementById("risk").value
+    );
+
+    const stopLoss = Number(
+        document.getElementById("stopLoss").value
+    );
+
+    const pairElement = document.getElementById("pair");
+    const priceElement = document.getElementById("price");
     const result = document.getElementById("risk-result");
 
-    if (balance <= 0 || risk <= 0 || stopLoss <= 0 || price <= 0) {
+    if (!balance || !risk || !stopLoss) {
+
         result.innerHTML = `
-            <p>Please enter valid numbers in all fields.</p>
+            <p>Please enter your balance, risk and stop loss.</p>
         `;
+
         return;
     }
 
+    const pair = pairElement ? pairElement.value : "EURUSD";
+    const price = priceElement ? Number(priceElement.value) : 0;
+
     const riskAmount = balance * (risk / 100);
 
-    let pipSize = pair.includes("JPY") ? 0.01 : 0.0001;
+    let pipSize = 0.0001;
 
-    let pipValue;
-
-    if (
-        pair === "EURUSD" ||
-        pair === "GBPUSD" ||
-        pair === "AUDUSD" ||
-        pair === "NZDUSD"
-    ) {
-        pipValue = 10;
-    } else {
-        pipValue = (pipSize * 100000) / price;
+    if (pair.includes("JPY")) {
+        pipSize = 0.01;
     }
 
-    const lotSize = riskAmount / (stopLoss * pipValue);
+    let pipValuePerLot = 10;
+
+    /*
+       For USD-quoted pairs such as:
+       EUR/USD
+       GBP/USD
+       AUD/USD
+       NZD/USD
+
+       1 standard lot ≈ $10 per pip.
+    */
+
+    const cleanPair = pair.replace("/", "");
+
+    const usdQuotePairs = [
+        "EURUSD",
+        "GBPUSD",
+        "AUDUSD",
+        "NZDUSD"
+    ];
+
+    if (!usdQuotePairs.includes(cleanPair) && price > 0) {
+
+        pipValuePerLot =
+            (pipSize * 100000) / price;
+    }
+
+    const lotSize =
+        riskAmount /
+        (stopLoss * pipValuePerLot);
 
     result.innerHTML = `
-        <h3>Risk Calculation</h3>
+        <div class="calculator-result">
 
-        <p>Pair: ${pair.slice(0, 3)}/${pair.slice(3)}</p>
+            <h3>Risk Calculation</h3>
 
-        <p>Account Balance: $${balance.toFixed(2)}</p>
+            <p>
+                <strong>Pair:</strong>
+                ${cleanPair.slice(0, 3)}/${cleanPair.slice(3)}
+            </p>
 
-        <p>Risk: ${risk}%</p>
+            <p>
+                <strong>Account Balance:</strong>
+                $${balance.toFixed(2)}
+            </p>
 
-        <p>Stop Loss: ${stopLoss} pips</p>
+            <p>
+                <strong>Risk:</strong>
+                ${risk}%
+            </p>
 
-        <h2>Maximum Risk: $${riskAmount.toFixed(2)}</h2>
+            <p>
+                <strong>Stop Loss:</strong>
+                ${stopLoss} pips
+            </p>
 
-        <h2>Estimated Lot Size: ${lotSize.toFixed(3)}</h2>
+            <h2>
+                Maximum Risk:
+                $${riskAmount.toFixed(2)}
+            </h2>
 
-        <p>
-            Always verify the result with your broker's
-            contract and pip-value specifications.
-        </p>
+            <h2>
+                Estimated Lot Size:
+                ${lotSize.toFixed(3)}
+            </h2>
+
+            <p>
+                Always verify the final lot size with
+                your broker before placing a live trade.
+            </p>
+
+        </div>
     `;
 }
+
+
+// ========================================
+// TRADING JOURNAL
+// ========================================
+
 function addTrade() {
 
-    const pair = document.getElementById("journal-pair").value;
-    const tradeType = document.getElementById("trade-type").value;
-    const entry = document.getElementById("entry-price").value;
-    const stopLoss = document.getElementById("journal-stop").value;
-    const takeProfit = document.getElementById("take-profit").value;
-    const lotSize = document.getElementById("journal-lot").value;
-    const tradeResult = document.getElementById("trade-result").value;
-    const notes = document.getElementById("trade-notes").value;
+    const pairElement =
+        document.getElementById("journal-pair");
 
+    const tradeTypeElement =
+        document.getElementById("trade-type");
+
+    const entryElement =
+        document.getElementById("entry-price");
+
+    const stopElement =
+        document.getElementById("journal-stop");
+
+    const takeProfitElement =
+        document.getElementById("take-profit");
+
+    const lotElement =
+        document.getElementById("journal-lot");
+
+    const resultElement =
+        document.getElementById("trade-result");
+
+    const notesElement =
+        document.getElementById("trade-notes");
+
+
+    // Check that the journal exists
+    if (
+        !pairElement ||
+        !tradeTypeElement ||
+        !entryElement ||
+        !stopElement ||
+        !takeProfitElement ||
+        !lotElement ||
+        !resultElement ||
+        !notesElement
+    ) {
+
+        alert(
+            "Trading Journal could not be found. Please check your HTML."
+        );
+
+        return;
+    }
+
+
+    const pair = pairElement.value;
+    const tradeType = tradeTypeElement.value;
+    const entry = entryElement.value.trim();
+    const stopLoss = stopElement.value.trim();
+    const takeProfit = takeProfitElement.value.trim();
+    const lotSize = lotElement.value.trim();
+    const tradeResult = resultElement.value;
+    const notes = notesElement.value.trim();
+
+
+    // Validate required fields
     if (
         entry === "" ||
         stopLoss === "" ||
         takeProfit === "" ||
         lotSize === ""
     ) {
-        alert("Please fill in all required trade information.");
+
+        alert(
+            "Please fill in Entry Price, Stop Loss, Take Profit and Lot Size."
+        );
+
         return;
     }
 
+
+    // Create trade
     const trade = {
+
         pair: pair,
+
         tradeType: tradeType,
+
         entry: entry,
+
         stopLoss: stopLoss,
+
         takeProfit: takeProfit,
+
         lotSize: lotSize,
+
         tradeResult: tradeResult,
+
         notes: notes || "No notes added.",
+
         date: new Date().toLocaleString()
+
     };
 
-    let trades = JSON.parse(localStorage.getItem("sifTrades")) || [];
 
+    // Get existing trades
+    let trades =
+        JSON.parse(
+            localStorage.getItem("sifTrades")
+        ) || [];
+
+
+    // Add new trade
     trades.push(trade);
 
-    localStorage.setItem("sifTrades", JSON.stringify(trades));
 
+    // Save trades
+    localStorage.setItem(
+        "sifTrades",
+        JSON.stringify(trades)
+    );
+
+
+    // Update page
     displayTrades();
 
-    document.getElementById("entry-price").value = "";
-    document.getElementById("journal-stop").value = "";
-    document.getElementById("take-profit").value = "";
-    document.getElementById("journal-lot").value = "";
-    document.getElementById("trade-notes").value = "";
+    updateTradingStats();
+
+
+    // Clear input fields
+    entryElement.value = "";
+
+    stopElement.value = "";
+
+    takeProfitElement.value = "";
+
+    lotElement.value = "";
+
+    notesElement.value = "";
+
 
     alert("Trade saved successfully! 📒");
-} function displayTrades() {
+
+}
+
+
+// ========================================
+// DISPLAY SAVED TRADES
+// ========================================
+
+function displayTrades() {
 
     const journalResults =
         document.getElementById("journal-results");
 
-    const trades =
-        JSON.parse(localStorage.getItem("sifTrades")) || [];
 
+    if (!journalResults) {
+        return;
+    }
+
+
+    const trades =
+        JSON.parse(
+            localStorage.getItem("sifTrades")
+        ) || [];
+
+
+    // No trades
     if (trades.length === 0) {
 
         journalResults.innerHTML = `
@@ -217,130 +294,201 @@ function addTrade() {
         return;
     }
 
+
     journalResults.innerHTML = `
         <h2>📋 Your Trade History</h2>
     `;
 
-    trades.forEach((trade) => {
+
+    trades.forEach(function(trade, index) {
+
+        const cleanPair =
+            String(trade.pair).replace("/", "");
+
+
+        const pairName =
+            cleanPair.length >= 6
+                ? cleanPair.slice(0, 3) +
+                  "/" +
+                  cleanPair.slice(3)
+                : trade.pair;
+
 
         journalResults.innerHTML += `
+
             <div class="trade-card">
 
                 <h3>
-                    ${trade.pair.slice(0, 3)}/${trade.pair.slice(3)}
+                    ${pairName}
                 </h3>
 
-                <p><strong>Trade:</strong> ${trade.tradeType}</p>
+                <p>
+                    <strong>Trade:</strong>
+                    ${trade.tradeType}
+                </p>
 
-                <p><strong>Entry:</strong> ${trade.entry}</p>
+                <p>
+                    <strong>Entry:</strong>
+                    ${trade.entry}
+                </p>
 
-                <p><strong>Stop Loss:</strong> ${trade.stopLoss}</p>
+                <p>
+                    <strong>Stop Loss:</strong>
+                    ${trade.stopLoss}
+                </p>
 
-                <p><strong>Take Profit:</strong> ${trade.takeProfit}</p>
+                <p>
+                    <strong>Take Profit:</strong>
+                    ${trade.takeProfit}
+                </p>
 
-                <p><strong>Lot Size:</strong> ${trade.lotSize}</p>
+                <p>
+                    <strong>Lot Size:</strong>
+                    ${trade.lotSize}
+                </p>
 
-                <p><strong>Result:</strong> ${trade.tradeResult}</p>
+                <p>
+                    <strong>Result:</strong>
+                    ${trade.tradeResult}
+                </p>
 
-                <p><strong>Notes:</strong> ${trade.notes}</p>
+                <p>
+                    <strong>Notes:</strong>
+                    ${trade.notes}
+                </p>
 
-                <small>${trade.date}</small>
+                <small>
+                    ${trade.date}
+                </small>
 
             </div>
+
         `;
     });
+
 }
 
+
+// ========================================
+// PERFORMANCE DASHBOARD
+// ========================================
 
 function updateTradingStats() {
 
     const trades =
-        JSON.parse(localStorage.getItem("sifTrades")) || [];
+        JSON.parse(
+            localStorage.getItem("sifTrades")
+        ) || [];
 
-    const totalTrades = trades.length;
 
-    const wins = trades.filter(
-        trade => trade.tradeResult === "Win"
-    ).length;
+    const totalTrades =
+        trades.length;
 
-    const losses = trades.filter(
-        trade => trade.tradeResult === "Loss"
-    ).length;
 
-    const breakEven = trades.filter(
-        trade => trade.tradeResult === "Break Even"
-    ).length;
+    const wins =
+        trades.filter(function(trade) {
+
+            return trade.tradeResult === "Win";
+
+        }).length;
+
+
+    const losses =
+        trades.filter(function(trade) {
+
+            return trade.tradeResult === "Loss";
+
+        }).length;
+
+
+    const breakEven =
+        trades.filter(function(trade) {
+
+            return trade.tradeResult === "Break Even";
+
+        }).length;
+
 
     let winRate = 0;
 
+
     if (totalTrades > 0) {
-        winRate = (wins / totalTrades) * 100;
+
+        winRate =
+            (wins / totalTrades) * 100;
+
     }
 
-    document.getElementById("total-trades").textContent =
-        totalTrades;
 
-    document.getElementById("total-wins").textContent =
-        wins;
+    const totalTradesElement =
+        document.getElementById("total-trades");
 
-    document.getElementById("total-losses").textContent =
-        losses;
+    const totalWinsElement =
+        document.getElementById("total-wins");
 
-    document.getElementById("total-break-even").textContent =
-        breakEven;
+    const totalLossesElement =
+        document.getElementById("total-losses");
 
-    document.getElementById("win-rate").textContent =
-        winRate.toFixed(1) + "%";
+    const totalBreakEvenElement =
+        document.getElementById("total-break-even");
+
+    const winRateElement =
+        document.getElementById("win-rate");
+
+
+    if (totalTradesElement) {
+
+        totalTradesElement.textContent =
+            totalTrades;
+
+    }
+
+
+    if (totalWinsElement) {
+
+        totalWinsElement.textContent =
+            wins;
+
+    }
+
+
+    if (totalLossesElement) {
+
+        totalLossesElement.textContent =
+            losses;
+
+    }
+
+
+    if (totalBreakEvenElement) {
+
+        totalBreakEvenElement.textContent =
+            breakEven;
+
+    }
+
+
+    if (winRateElement) {
+
+        winRateElement.textContent =
+            winRate.toFixed(1) + "%";
+
+    }
+
 }
 
 
-displayTrades();
-updateTradingStats();
+// ========================================
+// LOAD JOURNAL WHEN PAGE OPENS
+// ========================================
 
-    const journalResults = document.getElementById("journal-results");
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    const trades =
-        JSON.parse(localStorage.getItem("sifTrades")) || [];
+        displayTrades();
 
-    if (trades.length === 0) {
+        updateTradingStats();
 
-        journalResults.innerHTML = `
-            <p>No trades recorded yet.</p>
-        `;
-
-        return;
     }
-
-    journalResults.innerHTML = `
-        <h2>📋 Your Trade History</h2>
-    `;
-
-    trades.forEach((trade, index) => {
-
-        journalResults.innerHTML += `
-            <div class="trade-card">
-
-                <h3>
-                    ${trade.pair.slice(0, 3)}/${trade.pair.slice(3)}
-                </h3>
-
-                <p><strong>Trade:</strong> ${trade.tradeType}</p>
-
-                <p><strong>Entry:</strong> ${trade.entry}</p>
-
-                <p><strong>Stop Loss:</strong> ${trade.stopLoss}</p>
-
-                <p><strong>Take Profit:</strong> ${trade.takeProfit}</p>
-
-                <p><strong>Lot Size:</strong> ${trade.lotSize}</p>
-
-                <p><strong>Result:</strong> ${trade.tradeResult}</p>
-
-                <p><strong>Notes:</strong> ${trade.notes}</p>
-
-                <small>${trade.date}</small>
-
-            </div>
-        `;
-    });
-}
+);
