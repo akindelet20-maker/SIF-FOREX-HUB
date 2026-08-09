@@ -1353,6 +1353,24 @@ function markLessonComplete() {
             "sifCompletedLessons",
             JSON.stringify(completed)
         );
+    }
+
+    alert("✅ Lesson marked as complete!");
+}
+
+    const completed =
+        JSON.parse(
+            localStorage.getItem("sifCompletedLessons")
+        ) || [];
+
+    if (!completed.includes(currentLesson)) {
+
+        completed.push(currentLesson);
+
+        localStorage.setItem(
+            "sifCompletedLessons",
+            JSON.stringify(completed)
+        );
 
     }
 
