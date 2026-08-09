@@ -200,7 +200,7 @@ function addTrade() {
     document.getElementById("trade-notes").value = "";
 
     alert("Trade saved successfully! 📒");
-}displayTrades();
+} function displayTrades();
 updateTradingStats(); {
 
     const trades =
@@ -241,7 +241,7 @@ updateTradingStats(); {
     document.getElementById("win-rate").textContent =
         winRate.toFixed(1) + "%";
 } displayTrades();
-updateTradingStats(); {
+updateTradingStats();
 
     const journalResults = document.getElementById("journal-results");
 
