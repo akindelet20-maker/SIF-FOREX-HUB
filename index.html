@@ -34,7 +34,57 @@
     Start Learning
 </button>
 
-<div id="learning-options"></div>
+<div id="learning-options">
+
+    <div id="learning-home">
+
+        <h2>📚 SIF FOREX HUB Learning Center</h2>
+
+        <p>
+            Build your Forex knowledge step-by-step,
+            from beginner to advanced.
+        </p>
+
+        <button onclick="openBeginnerCourse()">
+            🟢 Start Beginner Course
+        </button>
+
+    </div>
+
+    <div id="learning-course" style="display: none;">
+
+        <div id="lesson-progress"></div>
+
+        <div id="lesson-content"></div>
+
+        <div class="lesson-navigation">
+
+            <button
+                onclick="previousLesson()"
+                id="previous-lesson"
+            >
+                ← Previous
+            </button>
+
+            <button
+                onclick="markLessonComplete()"
+                id="complete-lesson"
+            >
+                ✅ Mark as Complete
+            </button>
+
+            <button
+                onclick="nextLesson()"
+                id="next-lesson"
+            >
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
     </header>
 
