@@ -152,3 +152,56 @@ function calculateRisk() {
         </p>
     `;
 }
+function addTrade() {
+
+    const pair = document.getElementById("journal-pair").value;
+    const tradeType = document.getElementById("trade-type").value;
+    const entry = document.getElementById("entry-price").value;
+    const stopLoss = document.getElementById("journal-stop").value;
+    const takeProfit = document.getElementById("take-profit").value;
+    const lotSize = document.getElementById("journal-lot").value;
+    const tradeResult = document.getElementById("trade-result").value;
+    const notes = document.getElementById("trade-notes").value;
+
+    const journalResults = document.getElementById("journal-results");
+
+    if (
+        entry === "" ||
+        stopLoss === "" ||
+        takeProfit === "" ||
+        lotSize === ""
+    ) {
+        journalResults.innerHTML = `
+            <p>Please fill in all required trade information.</p>
+        `;
+        return;
+    }
+
+    journalResults.innerHTML += `
+        <div class="trade-card">
+
+            <h3>${pair.slice(0, 3)}/${pair.slice(3)}</h3>
+
+            <p><strong>Trade:</strong> ${tradeType}</p>
+
+            <p><strong>Entry:</strong> ${entry}</p>
+
+            <p><strong>Stop Loss:</strong> ${stopLoss}</p>
+
+            <p><strong>Take Profit:</strong> ${takeProfit}</p>
+
+            <p><strong>Lot Size:</strong> ${lotSize}</p>
+
+            <p><strong>Result:</strong> ${tradeResult}</p>
+
+            <p><strong>Notes:</strong> ${notes || "No notes added."}</p>
+
+        </div>
+    `;
+
+    document.getElementById("entry-price").value = "";
+    document.getElementById("journal-stop").value = "";
+    document.getElementById("take-profit").value = "";
+    document.getElementById("journal-lot").value = "";
+    document.getElementById("trade-notes").value = "";
+}
