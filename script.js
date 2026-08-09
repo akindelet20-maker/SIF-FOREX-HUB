@@ -95,3 +95,28 @@ function chooseLevel(level) {
         `;
     }
 }
+function calculateRisk() {
+
+    const balance = Number(document.getElementById("balance").value);
+    const risk = Number(document.getElementById("risk").value);
+    const stopLoss = Number(document.getElementById("stopLoss").value);
+
+    const result = document.getElementById("risk-result");
+
+    if (balance <= 0 || risk <= 0 || stopLoss <= 0) {
+        result.innerHTML = `
+            <p>Please enter valid numbers in all fields.</p>
+        `;
+        return;
+    }
+
+    const riskAmount = balance * (risk / 100);
+
+    result.innerHTML = `
+        <h3>Risk Calculation</h3>
+        <p>Account Balance: $${balance.toFixed(2)}</p>
+        <p>Risk: ${risk}%</p>
+        <p>Stop Loss: ${stopLoss} pips</p>
+        <h2>Maximum Risk: $${riskAmount.toFixed(2)}</h2>
+    `;
+}
