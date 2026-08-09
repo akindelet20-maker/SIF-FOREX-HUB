@@ -155,7 +155,25 @@ section > h2 {
 
  @media (max-width: 768px) {
 
-    body {
+    body 
+         #risk-calculator {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .calculator {
+        padding: 22px 18px;
+    }
+
+    .calculator input {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    #risk-result h2 {
+        font-size: 22px;
+    }
+     {
         font-size: 16px;
     }
 
