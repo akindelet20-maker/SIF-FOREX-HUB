@@ -521,6 +521,24 @@ function deleteTrade(index) {
     updateTradingStats();
 
     alert("Trade deleted successfully.");
+    document.addEventListener(
+        function clearJournal() {
+
+    const confirmClear = confirm(
+        "Are you sure you want to delete ALL your saved trades?"
+    );
+
+    if (!confirmClear) {
+        return;
+    }
+
+    localStorage.removeItem("sifTrades");
+
+    displayTrades();
+    updateTradingStats();
+
+    alert("All trades have been cleared.");
+        }
     function clearJournal() {
 
     const confirmClear = confirm(
