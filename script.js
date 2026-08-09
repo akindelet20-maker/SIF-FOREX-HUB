@@ -200,8 +200,49 @@ function addTrade() {
     document.getElementById("trade-notes").value = "";
 
     alert("Trade saved successfully! 📒");
+}function displayTrades();
+updateTradingStats(); {
+
+    const trades =
+        JSON.parse(localStorage.getItem("sifTrades")) || [];
+
+    const totalTrades = trades.length;
+
+    const wins = trades.filter(
+        trade => trade.tradeResult === "Win"
+    ).length;
+
+    const losses = trades.filter(
+        trade => trade.tradeResult === "Loss"
+    ).length;
+
+    const breakEven = trades.filter(
+        trade => trade.tradeResult === "Break Even"
+    ).length;
+
+    let winRate = 0;
+
+    if (totalTrades > 0) {
+        winRate = (wins / totalTrades) * 100;
+    }
+
+    document.getElementById("total-trades").textContent =
+        totalTrades;
+
+    document.getElementById("total-wins").textContent =
+        wins;
+
+    document.getElementById("total-losses").textContent =
+        losses;
+
+    document.getElementById("total-break-even").textContent =
+        breakEven;
+
+    document.getElementById("win-rate").textContent =
+        winRate.toFixed(1) + "%";
 }
-function displayTrades() {
+function displayTrades();
+updateTradingStats(); {
 
     const journalResults = document.getElementById("journal-results");
 
