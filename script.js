@@ -1270,9 +1270,13 @@ const lessonStatus =
 
             <h2>${lesson.title}</h2>
 
-            <div class="lesson-text">
-                ${lesson.content}
-            </div>
+<div class="lesson-status">
+    ${lessonStatus}
+</div>
+
+<div class="lesson-text">
+    ${lesson.content}
+</div>
 
         </article>
     `;
