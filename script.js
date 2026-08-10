@@ -1382,6 +1382,9 @@ window.previousLesson =
 
 window.markLessonComplete =
     markLessonComplete;
+
+// Make Learning Center lesson display available to HTML buttons
+window.showLesson = showLesson;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
