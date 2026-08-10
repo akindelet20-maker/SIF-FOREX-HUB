@@ -1385,6 +1385,57 @@ window.markLessonComplete =
 
 // Make Learning Center lesson display available to HTML buttons
 window.showLesson = showLesson;
+
+function updateCourseProgress() {
+
+    const progressBox =
+        document.getElementById("course-progress");
+
+    if (!progressBox) {
+        return;
+    }
+
+    const completed =
+        JSON.parse(
+            localStorage.getItem("sifCompletedLessons")
+        ) || [];
+
+    const total =
+        beginnerLessons.length;
+
+    const completedCount =
+        completed.length;
+
+    const percentage =
+        Math.round(
+            (completedCount / total) * 100
+        );
+
+    progressBox.innerHTML = `
+        <div class="course-progress-card">
+
+            <strong>📚 Beginner Course Progress</strong>
+
+            <p>
+                ${completedCount} / ${total}
+                lessons completed
+            </p>
+
+            <div class="progress-bar">
+                <div
+                    class="progress-fill"
+                    style="width: ${percentage}%"
+                ></div>
+            </div>
+
+            <small>${percentage}% Complete</small>
+
+        </div>
+    `;
+}
+
+window.updateCourseProgress =
+    updateCourseProgress;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
