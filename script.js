@@ -1207,7 +1207,23 @@ function openBeginnerCourse() {
    ========================================================= */
 
 function showLesson() {
+   
+const completed =
+    JSON.parse(
+        localStorage.getItem("sifCompletedLessons")
+    ) || [];
 
+const isCompleted =
+    completed.includes(currentLesson);
+
+const lessonStatus =
+    isCompleted
+        ? "✅ Completed"
+        : currentLesson === 0 ||
+          completed.includes(currentLesson - 1)
+            ? "🔵 In Progress"
+            : "🔒 Not Started";
+   
     const lesson =
         beginnerLessons[currentLesson];
 
