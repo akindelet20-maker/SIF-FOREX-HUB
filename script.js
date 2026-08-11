@@ -1922,6 +1922,15 @@ function updateLearningDashboard() {
 
 window.updateLearningDashboard =
     updateLearningDashboard;
+
+window.updateLearningDashboard =
+    updateLearningDashboard;
+
+updateLearningDashboard();
+
+/* =========================================================
+   END OF SCRIPT
+   ========================================================= */
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
