@@ -1572,6 +1572,43 @@ window.renderBeginnerLessonList =
 
 window.openLessonFromList =
     openLessonFromList;
+
+function checkBeginnerCourseCompletion() {
+
+    const completed =
+        JSON.parse(
+            localStorage.getItem("sifCompletedLessons")
+        ) || [];
+
+    const total = beginnerLessons.length;
+
+    if (completed.length >= total) {
+
+        const progressBox =
+            document.getElementById("course-progress");
+
+        if (progressBox) {
+            progressBox.innerHTML += `
+                <div class="course-completed">
+                    <h3>🎓 Course Completed!</h3>
+                    <p>
+                        🎉 Congratulations!
+                        You have completed the
+                        Beginner Forex Course.
+                    </p>
+                    <strong>
+                        ${total} / ${total}
+                        Lessons Completed — 100%
+                    </strong>
+                    <p>🏆 Beginner Forex Trader</p>
+                </div>
+            `;
+        }
+    }
+}
+
+window.checkBeginnerCourseCompletion =
+    checkBeginnerCourseCompletion;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
