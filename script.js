@@ -1920,6 +1920,212 @@ function updateLearningDashboard() {
     `;
 }
 
+/* =========================================================
+   ADVANCED FOREX COURSE
+   ========================================================= */
+
+const advancedLessons = [
+    {
+        title: "Lesson 1: Advanced Market Structure",
+        content: "Learn how to read major and minor market structure, identify strong swing points, and understand how price moves from one liquidity area to another."
+    },
+    {
+        title: "Lesson 2: Liquidity Sweeps & Manipulation",
+        content: "Learn how Smart Money targets buy-side and sell-side liquidity, including equal highs, equal lows, previous highs, previous lows, and stop hunts."
+    },
+    {
+        title: "Lesson 3: Advanced Order Blocks",
+        content: "Learn how to identify high-quality bullish and bearish order blocks and how displacement and liquidity help confirm an order block."
+    },
+    {
+        title: "Lesson 4: Fair Value Gap & Displacement",
+        content: "Understand displacement, imbalance, and Fair Value Gaps. Learn how strong impulsive moves can leave areas that price may later revisit."
+    },
+    {
+        title: "Lesson 5: Premium & Discount",
+        content: "Learn how to use the dealing range to identify premium and discount zones and understand where buying and selling opportunities may have better risk-to-reward."
+    },
+    {
+        title: "Lesson 6: Multi-Timeframe Analysis",
+        content: "Learn how to combine higher-timeframe bias with lower-timeframe execution. Study the relationship between Daily, 4H, 1H, 15M and 5M analysis."
+    },
+    {
+        title: "Lesson 7: Advanced SMC Entry Model",
+        content: "Build a complete SMC entry model using liquidity sweep, market structure shift, displacement, order block or Fair Value Gap, confirmation and precise risk placement."
+    },
+    {
+        title: "Lesson 8: Advanced Trade Management",
+        content: "Learn how to manage open positions, protect capital, take partial profits, move stop loss responsibly, and avoid emotional trade management."
+    },
+    {
+        title: "Lesson 9: Advanced Risk Management",
+        content: "Learn professional risk management, position sizing, risk-to-reward planning, daily loss limits, drawdown control and how to protect a trading account."
+    },
+    {
+        title: "Lesson 10: Professional Trading Psychology",
+        content: "Learn discipline, patience, emotional control, consistency, journaling and how to follow your trading plan even after wins and losses."
+    }
+];
+
+function getAdvancedCompletedLessons() {
+    return JSON.parse(
+        localStorage.getItem("sifAdvancedCompletedLessons")
+    ) || [];
+}
+
+function saveAdvancedCompletedLessons(completed) {
+    localStorage.setItem(
+        "sifAdvancedCompletedLessons",
+        JSON.stringify(completed)
+    );
+}
+
+function openAdvancedCourse() {
+
+    const section =
+        document.getElementById("advanced-course");
+
+    if (!section) return;
+
+    const completed =
+        getAdvancedCompletedLessons();
+
+    section.innerHTML = `
+        <h2>🟣 Advanced Forex Course</h2>
+
+        <p>
+            Welcome to the Advanced Forex Course.
+            Choose a lesson below to continue your Forex journey.
+        </p>
+
+        <div id="advanced-course-progress">
+            <h3>📚 Advanced Course Progress</h3>
+            <p>
+                ${completed.length} / ${advancedLessons.length}
+                lessons completed
+            </p>
+            <p>
+                ${Math.round(
+                    (completed.length / advancedLessons.length) * 100
+                )}% Complete
+            </p>
+        </div>
+
+        <div id="advanced-lesson-list"></div>
+    `;
+
+    const list =
+        document.getElementById("advanced-lesson-list");
+
+    advancedLessons.forEach((lesson, index) => {
+
+        const button =
+            document.createElement("button");
+
+        const isCompleted =
+            completed.includes(index);
+
+        button.textContent =
+            `${isCompleted ? "✅" : "📖"} ${index + 1}. ${lesson.title}`;
+
+        button.style.display = "block";
+        button.style.margin = "10px 0";
+
+        button.onclick = function () {
+
+            const currentCompleted =
+                getAdvancedCompletedLessons();
+
+            const alreadyCompleted =
+                currentCompleted.includes(index);
+
+            section.innerHTML = `
+                <h2>${lesson.title}</h2>
+
+                <p>
+                    ${lesson.content}
+                </p>
+
+                <hr>
+
+                <button id="complete-advanced-lesson">
+                    ${alreadyCompleted
+                        ? "✅ Lesson Completed"
+                        : "✅ Mark Lesson Complete"}
+                </button>
+
+                <button onclick="openAdvancedCourse()">
+                    ← Back to Lessons
+                </button>
+            `;
+
+            const completeButton =
+                document.getElementById(
+                    "complete-advanced-lesson"
+                );
+
+            if (alreadyCompleted) {
+                completeButton.disabled = true;
+            }
+
+            completeButton.onclick = function () {
+
+                const updated =
+                    getAdvancedCompletedLessons();
+
+                if (!updated.includes(index)) {
+                    updated.push(index);
+
+                    saveAdvancedCompletedLessons(updated);
+                }
+
+                openAdvancedCourse();
+
+                if (typeof updateLearningDashboard === "function") {
+                    updateLearningDashboard();
+                }
+            };
+        };
+
+        list.appendChild(button);
+    });
+
+    if (completed.length === advancedLessons.length) {
+
+        const completionBox =
+            document.createElement("div");
+
+        completionBox.innerHTML = `
+            <div class="course-completed">
+                <h3>🎓 Course Completed!</h3>
+
+                <p>
+                    🎉 Congratulations!
+                    You have completed the Advanced Forex Course.
+                </p>
+
+                <strong>
+                    ${advancedLessons.length} / ${advancedLessons.length}
+                    Lessons Completed — 100%
+                </strong>
+
+                <p>
+                    🏆 Advanced Forex Trader
+                </p>
+            </div>
+        `;
+
+        section.prepend(completionBox);
+    }
+}
+
+window.openAdvancedCourse =
+    openAdvancedCourse;
+
+/* =========================================================
+   END OF ADVANCED FOREX COURSE
+   ========================================================= */
+
 window.updateLearningDashboard =
     updateLearningDashboard;
 
