@@ -1376,7 +1376,7 @@ function markLessonComplete() {
             "sifCompletedLessons",
             JSON.stringify(completed)
         );
-       
+
        updateCourseProgress();
        checkBeginnerCourseCompletion();
 
