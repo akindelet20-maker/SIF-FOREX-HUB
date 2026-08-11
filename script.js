@@ -1665,43 +1665,170 @@ function openIntermediateCourse() {
 
     if (!section) return;
 
-    section.innerHTML = `
-        <h2>📘 Intermediate Forex Course</h2>
+    const storageKey = "sifIntermediateCompletedLessons";
 
-        <p>
-            Welcome to the Intermediate Forex Course.
-            Choose a lesson below to begin learning.
-        </p>
+    function getCompleted() {
+        return JSON.parse(
+            localStorage.getItem(storageKey) || "[]"
+        );
+    }
 
-        <div id="intermediate-lesson-list"></div>
-    `;
+    function saveCompleted(completed) {
+        localStorage.setItem(
+            storageKey,
+            JSON.stringify(completed)
+        );
+    }
 
-    const list =
-        document.getElementById("intermediate-lesson-list");
+    function showCourse() {
 
-    intermediateLessons.forEach((lesson, index) => {
+        const completed = getCompleted();
+        const total = intermediateLessons.length;
+        const percentage =
+            total === 0 ? 0 :
+            Math.round((completed.length / total) * 100);
 
-        const button =
-            document.createElement("button");
+        section.innerHTML = `
+            <h2>📘 Intermediate Forex Course</h2>
 
-        button.textContent =
-            \`${index + 1}. ${lesson.title}\`;
+            <p>
+                Welcome to the Intermediate Forex Course.
+                Choose a lesson below to begin learning.
+            </p>
 
-        button.onclick = function () {
+            <div class="course-progress">
+                <h3>📚 Intermediate Course Progress</h3>
 
-            section.innerHTML = `
-                <h2>${lesson.title}</h2>
+                <p>
+                    ${completed.length} / ${total}
+                    lessons completed
+                </p>
 
-                <p>${lesson.content}</p>
+                <p>
+                    <strong>${percentage}% Complete</strong>
+                </p>
 
-                <button onclick="openIntermediateCourse()">
+                ${
+                    percentage === 100
+                    ? `
+                        <div class="course-completed">
+                            <h3>🎓 Course Completed!</h3>
+                            <p>
+                                🎉 Congratulations! You have completed
+                                the Intermediate Forex Course.
+                            </p>
+                            <strong>
+                                ${total} / ${total}
+                                Lessons Completed — 100%
+                            </strong>
+                            <p>🏆 Intermediate Forex Trader</p>
+                        </div>
+                    `
+                    : ""
+                }
+            </div>
+
+            <div id="intermediate-lesson-list"></div>
+        `;
+
+        const list =
+            document.getElementById(
+                "intermediate-lesson-list"
+            );
+
+        intermediateLessons.forEach((lesson, index) => {
+
+            const button =
+                document.createElement("button");
+
+            const isCompleted =
+                completed.includes(index);
+
+            button.textContent =
+                `${isCompleted ? "✅" : "📖"} ${index + 1}. ${lesson.title}`;
+
+            button.onclick = function () {
+                showLesson(index);
+            };
+
+            list.appendChild(button);
+        });
+    }
+
+    function showLesson(index) {
+
+        const lesson =
+            intermediateLessons[index];
+
+        if (!lesson) return;
+
+        const completed = getCompleted();
+
+        const isCompleted =
+            completed.includes(index);
+
+        section.innerHTML = `
+            <h2>${lesson.title}</h2>
+
+            <p>${lesson.content}</p>
+
+            <div style="margin-top:20px;">
+
+                ${
+                    isCompleted
+                    ? `<p>✅ <strong>Completed</strong></p>`
+                    : ""
+                }
+
+                <button id="intermediate-complete-btn">
+                    ${
+                        isCompleted
+                        ? "✅ Completed"
+                        : "☑️ Mark as Complete"
+                    }
+                </button>
+
+                <br><br>
+
+                <button id="intermediate-back-btn">
                     ← Back to Lessons
                 </button>
-            `;
-        };
+            </div>
+        `;
 
-        list.appendChild(button);
-    });
+        document
+            .getElementById(
+                "intermediate-complete-btn"
+            )
+            .onclick = function () {
+
+                const completedNow = getCompleted();
+
+                if (!completedNow.includes(index)) {
+
+                    completedNow.push(index);
+
+                    saveCompleted(completedNow);
+
+                    alert(
+                        "✅ Intermediate lesson marked as complete!"
+                    );
+                }
+
+                showLesson(index);
+            };
+
+        document
+            .getElementById(
+                "intermediate-back-btn"
+            )
+            .onclick = function () {
+
+                showCourse();
+            };
+    }
+
+    showCourse();
 }
 
 window.openIntermediateCourse =
