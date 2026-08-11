@@ -1485,19 +1485,33 @@ function renderBeginnerLessonList() {
                 const isCurrent =
                     index === currentLesson;
 
-                let status = "🔒 Not Started";
+                let status = "🔒 Locked";
+let isLocked = true;
 
-                if (isCompleted) {
-                    status = "✅ Completed";
-                } else if (isCurrent) {
-                    status = "🔵 In Progress";
-                }
+if (index === 0) {
+    status = isCompleted
+        ? "✅ Completed"
+        : "🟢 Available";
+
+    isLocked = false;
+
+} else if (isCompleted) {
+    status = "✅ Completed";
+    isLocked = false;
+
+} else if (completed.includes(index - 1)) {
+    status = "🟢 Available";
+    isLocked = false;
+}
 
                 return `
+
                     <button
-                        class="lesson-list-item"
-                        onclick="openLessonFromList(${index})"
-                    >
+    class="lesson-list-item"
+    ${isLocked ? "disabled" : ""}
+    onclick="${isLocked ? "" : `openLessonFromList(${index})`}"
+>
+
                         <span>
                             ${index + 1}. ${lesson.title}
                         </span>
