@@ -1833,6 +1833,95 @@ function openIntermediateCourse() {
 
 window.openIntermediateCourse =
     openIntermediateCourse;
+
+/* =========================================
+   LEARNING CENTER DASHBOARD
+   ========================================= */
+
+function updateLearningDashboard() {
+
+    const overallBox =
+        document.getElementById("overall-learning-progress");
+
+    const summaryBox =
+        document.getElementById("course-summary");
+
+    if (!overallBox || !summaryBox) {
+        return;
+    }
+
+    const beginnerCompleted =
+        JSON.parse(
+            localStorage.getItem("sifCompletedLessons") || "[]"
+        );
+
+    const intermediateCompleted =
+        JSON.parse(
+            localStorage.getItem(
+                "sifIntermediateCompletedLessons"
+            ) || "[]"
+        );
+
+    const beginnerTotal =
+        beginnerLessons.length;
+
+    const intermediateTotal =
+        intermediateLessons.length;
+
+    const totalLessons =
+        beginnerTotal + intermediateTotal;
+
+    const completedLessons =
+        beginnerCompleted.length +
+        intermediateCompleted.length;
+
+    const percentage =
+        totalLessons === 0
+            ? 0
+            : Math.round(
+                (completedLessons / totalLessons) * 100
+            );
+
+    overallBox.innerHTML = `
+        <div class="overall-progress-card">
+
+            <h3>📊 Overall Learning Progress</h3>
+
+            <p>
+                ${completedLessons} / ${totalLessons}
+                lessons completed
+            </p>
+
+            <strong>${percentage}% Complete</strong>
+
+        </div>
+    `;
+
+    summaryBox.innerHTML = `
+        <div class="course-summary">
+
+            <div class="course-summary-item">
+                <h3>🟢 Beginner Course</h3>
+                <p>
+                    ${beginnerCompleted.length}
+                    / ${beginnerTotal} completed
+                </p>
+            </div>
+
+            <div class="course-summary-item">
+                <h3>📘 Intermediate Course</h3>
+                <p>
+                    ${intermediateCompleted.length}
+                    / ${intermediateTotal} completed
+                </p>
+            </div>
+
+        </div>
+    `;
+}
+
+window.updateLearningDashboard =
+    updateLearningDashboard;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
