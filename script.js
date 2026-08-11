@@ -1378,6 +1378,7 @@ function markLessonComplete() {
         );
        
        updateCourseProgress();
+       checkBeginnerCourseCompletion();
 
     }
 
