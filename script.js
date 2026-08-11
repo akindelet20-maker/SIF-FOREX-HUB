@@ -1923,9 +1923,6 @@ function updateLearningDashboard() {
 window.updateLearningDashboard =
     updateLearningDashboard;
 
-window.updateLearningDashboard =
-    updateLearningDashboard;
-
 updateLearningDashboard();
 
 /* =========================================================
