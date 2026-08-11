@@ -1610,6 +1610,102 @@ function checkBeginnerCourseCompletion() {
 
 window.checkBeginnerCourseCompletion =
     checkBeginnerCourseCompletion;
+
+/* =========================================
+   INTERMEDIATE FOREX COURSE
+   ========================================= */
+
+const intermediateLessons = [
+    {
+        title: "Lesson 1: Market Structure",
+        content: "Learn higher highs, higher lows, lower highs, and lower lows."
+    },
+    {
+        title: "Lesson 2: Advanced Support & Resistance",
+        content: "Learn how to identify important support and resistance zones."
+    },
+    {
+        title: "Lesson 3: Liquidity",
+        content: "Understand buy-side and sell-side liquidity."
+    },
+    {
+        title: "Lesson 4: Order Blocks",
+        content: "Learn how to identify and use high-quality order blocks."
+    },
+    {
+        title: "Lesson 5: Fair Value Gaps",
+        content: "Understand imbalance and Fair Value Gaps."
+    },
+    {
+        title: "Lesson 6: Break of Structure",
+        content: "Learn how to identify valid breaks of structure."
+    },
+    {
+        title: "Lesson 7: Change of Character",
+        content: "Understand changes in market behaviour."
+    },
+    {
+        title: "Lesson 8: SMC Entry Model",
+        content: "Combine structure, liquidity and order blocks into an entry model."
+    },
+    {
+        title: "Lesson 9: Risk Management",
+        content: "Learn position sizing, stop loss placement and controlled risk."
+    },
+    {
+        title: "Lesson 10: Trading Psychology",
+        content: "Learn discipline, patience, emotional control and consistency."
+    }
+];
+
+function openIntermediateCourse() {
+
+    const section =
+        document.getElementById("intermediate-course");
+
+    if (!section) return;
+
+    section.innerHTML = `
+        <h2>📘 Intermediate Forex Course</h2>
+
+        <p>
+            Welcome to the Intermediate Forex Course.
+            Choose a lesson below to begin learning.
+        </p>
+
+        <div id="intermediate-lesson-list"></div>
+    `;
+
+    const list =
+        document.getElementById("intermediate-lesson-list");
+
+    intermediateLessons.forEach((lesson, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.textContent =
+            \`${index + 1}. ${lesson.title}\`;
+
+        button.onclick = function () {
+
+            section.innerHTML = `
+                <h2>${lesson.title}</h2>
+
+                <p>${lesson.content}</p>
+
+                <button onclick="openIntermediateCourse()">
+                    ← Back to Lessons
+                </button>
+            `;
+        };
+
+        list.appendChild(button);
+    });
+}
+
+window.openIntermediateCourse =
+    openIntermediateCourse;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
