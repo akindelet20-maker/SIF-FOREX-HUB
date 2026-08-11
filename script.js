@@ -1458,6 +1458,106 @@ function updateCourseProgress() {
 
 window.updateCourseProgress =
     updateCourseProgress;
+
+function renderBeginnerLessonList() {
+
+    const list =
+        document.getElementById("beginner-lesson-list");
+
+    if (!list) {
+        return;
+    }
+
+    const completed =
+        JSON.parse(
+            localStorage.getItem("sifCompletedLessons")
+        ) || [];
+
+    list.innerHTML = `
+        <div class="beginner-lesson-list">
+            <h3>📚 Beginner Course Lessons</h3>
+
+            ${beginnerLessons.map((lesson, index) => {
+
+                const isCompleted =
+                    completed.includes(index);
+
+                const isCurrent =
+                    index === currentLesson;
+
+                let status = "🔒 Not Started";
+
+                if (isCompleted) {
+                    status = "✅ Completed";
+                } else if (isCurrent) {
+                    status = "🔵 In Progress";
+                }
+
+                return `
+                    <button
+                        class="lesson-list-item"
+                        onclick="openLessonFromList(${index})"
+                    >
+                        <span>
+                            ${index + 1}. ${lesson.title}
+                        </span>
+
+                        <small>
+                            ${status}
+                        </small>
+                    </button>
+                `;
+
+            }).join("")}
+
+        </div>
+    `;
+}
+
+
+function openLessonFromList(index) {
+
+    if (
+        index < 0 ||
+        index >= beginnerLessons.length
+    ) {
+        return;
+    }
+
+    currentLesson = index;
+
+    const home =
+        document.getElementById("learning-home");
+
+    const course =
+        document.getElementById("learning-course");
+
+    if (home) {
+        home.style.display = "none";
+    }
+
+    if (course) {
+        course.style.display = "block";
+    }
+
+    showLesson();
+
+    renderBeginnerLessonList();
+
+    if (course) {
+        course.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+window.renderBeginnerLessonList =
+    renderBeginnerLessonList;
+
+window.openLessonFromList =
+    openLessonFromList;
 /* =========================================================
    END OF SCRIPT
    ========================================================= */
