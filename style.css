@@ -454,3 +454,39 @@ section > h2 {
         display: none;
     }
 }
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #course-certificate,
+    #course-certificate * {
+        visibility: visible;
+    }
+
+    #course-certificate {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .course-certificate {
+        width: 100%;
+        min-height: 90vh;
+        border: 3px solid #f1c40f;
+        padding: 40px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    button {
+        display: none !important;
+    }
+
+}
