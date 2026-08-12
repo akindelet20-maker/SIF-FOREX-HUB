@@ -1942,6 +1942,63 @@ function updateLearningDashboard() {
 
         </div>
     `;
+
+   const certificateBox =
+    document.getElementById("course-certificate");
+
+if (certificateBox) {
+
+    if (completedLessons === totalLessons && totalLessons > 0) {
+
+        certificateBox.innerHTML = `
+            <div class="course-certificate">
+
+                <h2>🎓 Certificate of Completion</h2>
+
+                <p>
+                    Congratulations!
+                </p>
+
+                <p>
+                    You have successfully completed
+                    the SIF FOREX HUB Forex Trading Course.
+                </p>
+
+                <h3>🏆 SIF FOREX HUB Certified Forex Trader</h3>
+
+                <p>
+                    Beginner • Intermediate • Advanced
+                </p>
+
+                <strong>
+                    ${completedLessons} / ${totalLessons}
+                    Lessons Completed — 100%
+                </strong>
+
+            </div>
+        `;
+
+    } else {
+
+        certificateBox.innerHTML = `
+            <div class="course-certificate-locked">
+
+                <h3>🔒 Certificate Locked</h3>
+
+                <p>
+                    Complete all ${totalLessons} lessons
+                    to unlock your certificate.
+                </p>
+
+                <p>
+                    ${completedLessons} / ${totalLessons}
+                    lessons completed
+                </p>
+
+            </div>
+        `;
+    }
+}
 }
 
     
