@@ -1950,14 +1950,51 @@ if (certificateBox) {
 
     if (completedLessons === totalLessons && totalLessons > 0) {
 
+
+const savedStudentName =
+    localStorage.getItem("sifStudentName");
+
+let studentName = savedStudentName;
+
+if (!studentName) {
+    studentName = prompt(
+        "Enter your name for your SIF FOREX HUB certificate:"
+    );
+
+    if (!studentName) {
+        studentName = "SIF FOREX HUB Student";
+    }
+
+    localStorage.setItem(
+        "sifStudentName",
+        studentName
+    );
+}
+
+const completionDate =
+    new Date().toLocaleDateString("en-NG", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
         certificateBox.innerHTML = `
             <div class="course-certificate">
 
                 <h2>🎓 Certificate of Completion</h2>
 
-                <p>
-                    Congratulations!
-                </p>
+<p>Congratulations!</p>
+
+<h3>${studentName}</h3>
+
+<p>
+    has successfully completed the
+    SIF FOREX HUB Forex Trading Course.
+</p>
+
+<p>
+    📅 Date of Completion: ${completionDate}
+</p>
 
                 <p>
                     You have successfully completed
