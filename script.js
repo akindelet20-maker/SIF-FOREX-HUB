@@ -1862,18 +1862,31 @@ function updateLearningDashboard() {
             ) || "[]"
         );
 
+    const advancedCompleted =
+        JSON.parse(
+            localStorage.getItem(
+                "sifAdvancedCompletedLessons"
+            ) || "[]"
+        );
+
     const beginnerTotal =
         beginnerLessons.length;
 
     const intermediateTotal =
         intermediateLessons.length;
 
+    const advancedTotal =
+        advancedLessons.length;
+
     const totalLessons =
-        beginnerTotal + intermediateTotal;
+        beginnerTotal +
+        intermediateTotal +
+        advancedTotal;
 
     const completedLessons =
         beginnerCompleted.length +
-        intermediateCompleted.length;
+        intermediateCompleted.length +
+        advancedCompleted.length;
 
     const percentage =
         totalLessons === 0
@@ -1902,6 +1915,7 @@ function updateLearningDashboard() {
 
             <div class="course-summary-item">
                 <h3>🟢 Beginner Course</h3>
+
                 <p>
                     ${beginnerCompleted.length}
                     / ${beginnerTotal} completed
@@ -1910,15 +1924,27 @@ function updateLearningDashboard() {
 
             <div class="course-summary-item">
                 <h3>📘 Intermediate Course</h3>
+
                 <p>
                     ${intermediateCompleted.length}
                     / ${intermediateTotal} completed
                 </p>
             </div>
 
+            <div class="course-summary-item">
+                <h3>🟣 Advanced Course</h3>
+
+                <p>
+                    ${advancedCompleted.length}
+                    / ${advancedTotal} completed
+                </p>
+            </div>
+
         </div>
     `;
 }
+
+    
 
 /* =========================================================
    ADVANCED FOREX COURSE
