@@ -2018,6 +2018,10 @@ const completionDate =
                     Lessons Completed — 100%
                 </strong>
 
+<button onclick="printCertificate()">
+    🖨️ Print Certificate
+</button>
+
             </div>
         `;
 
