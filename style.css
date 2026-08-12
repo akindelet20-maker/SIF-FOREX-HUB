@@ -408,3 +408,49 @@ section > h2 {
     color: #ffffff;
     font-size: 16px;
 }
+
+/* ================================
+   CERTIFICATE PRINT / PDF
+================================ */
+
+.certificate-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.certificate-actions button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #f1c40f;
+    color: #10182b;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    .course-certificate,
+    .course-certificate * {
+        visibility: visible;
+    }
+
+    .course-certificate {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .certificate-actions {
+        display: none;
+    }
+}
