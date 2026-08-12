@@ -1907,6 +1907,12 @@ function updateLearningDashboard() {
 
             <strong>${percentage}% Complete</strong>
 
+<div class="certificate-actions">
+    <button onclick="printCertificate()">
+        🖨️ Download Certificate
+    </button>
+</div>
+
         </div>
     `;
 
@@ -2250,6 +2256,10 @@ window.updateLearningDashboard =
     updateLearningDashboard;
 
 updateLearningDashboard();
+
+function printCertificate() {
+    window.print();
+}
 
 /* =========================================================
    END OF SCRIPT
