@@ -429,33 +429,13 @@ section > h2 {
     cursor: pointer;
 }
 
+ 
 @media print {
 
-    body * {
-        visibility: hidden;
+    @page {
+        size: A4;
+        margin: 10mm;
     }
-
-    .course-certificate,
-    .course-certificate * {
-        visibility: visible;
-    }
-
-    .course-certificate {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        box-shadow: none;
-    }
-
-    .certificate-actions {
-        display: none;
-    }
-}
-
-@media print {
 
     body * {
         visibility: hidden;
@@ -472,21 +452,25 @@ section > h2 {
         top: 0;
         width: 100%;
         margin: 0;
-        padding: 20px;
+        padding: 0;
         box-sizing: border-box;
     }
 
     .course-certificate {
         width: 100%;
-        min-height: 90vh;
-        border: 3px solid #f1c40f;
+        min-height: auto;
+        margin: 0;
         padding: 40px;
+        border: 3px solid #f1c40f;
+        box-shadow: none;
         text-align: center;
         box-sizing: border-box;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 
+    .certificate-actions,
     button {
         display: none !important;
     }
-
 }
