@@ -1981,6 +1981,12 @@ const certificateId =
     "SIF-FX-" + new Date().getFullYear() + "-" +
     Math.floor(1000 + Math.random() * 9000);
 
+const certificateId =
+    "SIF-FX-" +
+    new Date().getFullYear() +
+    "-" +
+    Math.floor(1000 + Math.random() * 9000);
+
 const completionDate =
     new Date().toLocaleDateString("en-NG", {
         day: "numeric",
