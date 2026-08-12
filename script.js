@@ -2012,6 +2012,10 @@ const completionDate =
     📅 Date of Completion: ${completionDate}
 </p>
 
+<p>
+    🆔 Certificate ID: ${certificateId}
+</p>
+
                 <p>
                     You have successfully completed
                     the SIF FOREX HUB Forex Trading Course.
