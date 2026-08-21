@@ -528,7 +528,123 @@ section > h2 {
 .academy-level button:hover {
     transform: translateY(-2px);
 }
+/* =========================================
+   SIF FOREX HUB - SMC ACADEMY LESSON STYLE
+========================================= */
 
+.academy-level {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.academy-level:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(241, 196, 15, 0.15);
+}
+
+.academy-level h3 {
+    font-size: 21px;
+}
+
+.academy-level p {
+    color: #d6d9e0;
+}
+
+
+/* Course lesson buttons */
+
+#beginner-lesson-list button,
+#intermediate-lesson-list button,
+#advanced-lesson-list button {
+    width: 100%;
+    max-width: 700px;
+    margin: 10px auto;
+    display: block;
+
+    padding: 15px 18px;
+
+    border: 1px solid #f1c40f;
+    border-radius: 10px;
+
+    background: #10182b;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#beginner-lesson-list button:hover,
+#intermediate-lesson-list button:hover,
+#advanced-lesson-list button:hover {
+    background: #18233d;
+    transform: translateX(4px);
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.12);
+}
+
+
+/* Course progress */
+
+.course-progress,
+#advanced-course-progress {
+    max-width: 700px;
+    margin: 25px auto;
+    padding: 20px;
+
+    border-radius: 12px;
+
+    background: #10182b;
+    border: 1px solid rgba(241, 196, 15, 0.5);
+
+    text-align: center;
+}
+
+
+/* Completed course */
+
+.course-completed {
+    max-width: 700px;
+    margin: 25px auto;
+    padding: 25px;
+
+    border-radius: 15px;
+
+    background: #10182b;
+    border: 2px solid #f1c40f;
+
+    text-align: center;
+
+    box-shadow: 0 8px 25px rgba(241, 196, 15, 0.12);
+}
+
+.course-completed h3 {
+    color: #f1c40f;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .academy-level {
+        padding: 20px;
+    }
+
+    #beginner-lesson-list button,
+    #intermediate-lesson-list button,
+    #advanced-lesson-list button {
+        font-size: 15px;
+        padding: 14px;
+    }
+
+}
 @media (max-width: 768px) {
 
     .academy-levels {
