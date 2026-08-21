@@ -1704,9 +1704,18 @@ function openIntermediateCourse() {
                     lessons completed
                 </p>
 
-                <p>
-                    <strong>${percentage}% Complete</strong>
-                </p>
+                <div class="course-progress-bar">
+
+    <div
+        class="course-progress-fill"
+        style="width: ${percentage}%"
+    ></div>
+
+</div>
+
+<p>
+    <strong>${percentage}% Complete</strong>
+</p>
 
                 ${
                     percentage === 100
