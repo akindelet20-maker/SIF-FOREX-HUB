@@ -2170,11 +2170,30 @@ function openAdvancedCourse() {
                 ${completed.length} / ${advancedLessons.length}
                 lessons completed
             </p>
-            <p>
-                ${Math.round(
-                    (completed.length / advancedLessons.length) * 100
-                )}% Complete
-            </p>
+
+<div class="course-progress-bar">
+
+    <div
+        class="course-progress-fill"
+        style="width: ${
+            Math.round(
+                (completed.length /
+                advancedLessons.length) * 100
+            )
+        }%"
+    ></div>
+
+</div>
+
+<p>
+    <strong>
+        ${Math.round(
+            (completed.length /
+            advancedLessons.length) * 100
+        )}% Complete
+    </strong>
+</p>
+            
         </div>
 
         <div id="advanced-lesson-list"></div>
