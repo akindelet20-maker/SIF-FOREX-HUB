@@ -1394,6 +1394,7 @@ function markLessonComplete() {
 
        updateCourseProgress();
        checkBeginnerCourseCompletion();
+       showLesson();
 
     }
 
