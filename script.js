@@ -1237,32 +1237,47 @@ const lessonStatus =
         return;
     }
 
+const completedCount =
+    completed.length;
 
-    progress.innerHTML = `
-        <div class="lesson-progress">
-            <strong>
-                Lesson ${currentLesson + 1}
-                of ${beginnerLessons.length}
-            </strong>
+const completionPercentage =
+    beginnerLessons.length === 0
+        ? 0
+        : Math.round(
+            (completedCount /
+            beginnerLessons.length) * 100
+        );
 
-            <div class="progress-bar">
-                <div
-                    class="progress-fill"
-                    style="width: ${
-                        ((currentLesson + 1) /
-                        beginnerLessons.length) * 100
-                    }%"
-                ></div>
-            </div>
+progress.innerHTML = `
+    <div class="lesson-progress">
 
-            <small>
-                ${Math.round(
-                    ((currentLesson + 1) /
-                    beginnerLessons.length) * 100
-                )}% Complete
-            </small>
+        <strong>
+            📚 Beginner Course Progress
+        </strong>
+
+        <p>
+            ${completedCount}
+            /
+            ${beginnerLessons.length}
+            lessons completed
+        </p>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                style="width: ${completionPercentage}%"
+            ></div>
+
         </div>
-    `;
+
+        <small>
+            ${completionPercentage}% Complete
+        </small>
+
+    </div>
+`;
+    
 
 
     content.innerHTML = `
