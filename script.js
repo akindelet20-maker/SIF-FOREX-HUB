@@ -1862,7 +1862,6 @@ window.openIntermediateCourse =
 /* =========================================
    LEARNING CENTER DASHBOARD
    ========================================= */
-
 function updateLearningDashboard() {
 
     const overallBox =
@@ -1874,6 +1873,10 @@ function updateLearningDashboard() {
     if (!overallBox || !summaryBox) {
         return;
     }
+
+    /* =========================
+       GET COMPLETED LESSONS
+       ========================= */
 
     const beginnerCompleted =
         JSON.parse(
@@ -1892,7 +1895,11 @@ function updateLearningDashboard() {
             localStorage.getItem(
                 "sifAdvancedCompletedLessons"
             ) || "[]"
-        );
+            );
+
+    /* =========================
+       TOTAL LESSONS
+       ========================= */
 
     const beginnerTotal =
         beginnerLessons.length;
@@ -1917,8 +1924,41 @@ function updateLearningDashboard() {
         totalLessons === 0
             ? 0
             : Math.round(
-                (completedLessons / totalLessons) * 100
+                (completedLessons /
+                totalLessons) * 100
             );
+
+    /* =========================
+       COURSE PERCENTAGES
+       ========================= */
+
+    const beginnerPercentage =
+        beginnerTotal === 0
+            ? 0
+            : Math.round(
+                (beginnerCompleted.length /
+                beginnerTotal) * 100
+            );
+
+    const intermediatePercentage =
+        intermediateTotal === 0
+            ? 0
+            : Math.round(
+                (intermediateCompleted.length /
+                intermediateTotal) * 100
+            );
+
+    const advancedPercentage =
+        advancedTotal === 0
+            ? 0
+            : Math.round(
+                (advancedCompleted.length /
+                advancedTotal) * 100
+            );
+
+    /* =========================
+       OVERALL PROGRESS
+       ========================= */
 
     overallBox.innerHTML = `
         <div class="overall-progress-card">
@@ -1926,163 +1966,271 @@ function updateLearningDashboard() {
             <h3>📊 Overall Learning Progress</h3>
 
             <p>
-                ${completedLessons} / ${totalLessons}
+                ${completedLessons} /
+                ${totalLessons}
                 lessons completed
             </p>
 
-            <strong>${percentage}% Complete</strong>
+            <div class="course-progress-bar">
 
-<div class="certificate-actions">
-    <button onclick="printCertificate()">
-        🖨️ Download Certificate
-    </button>
-</div>
+                <div
+                    class="course-progress-fill"
+                    style="width: ${percentage}%"
+                ></div>
+
+            </div>
+
+            <strong>
+                ${percentage}% Complete
+            </strong>
+
+            <div class="certificate-actions">
+
+                <button onclick="printCertificate()">
+                    🖨️ Download Certificate
+                </button>
+
+            </div>
 
         </div>
     `;
 
+    /* =========================
+       COURSE SUMMARY
+       ========================= */
+
     summaryBox.innerHTML = `
+
         <div class="course-summary">
 
+            <!-- BEGINNER -->
+
             <div class="course-summary-item">
+
                 <h3>🟢 Beginner Course</h3>
 
                 <p>
                     ${beginnerCompleted.length}
-                    / ${beginnerTotal} completed
+                    / ${beginnerTotal}
+                    lessons completed
                 </p>
+
+                <div class="course-progress-bar">
+
+                    <div
+                        class="course-progress-fill"
+                        style="width: ${beginnerPercentage}%"
+                    ></div>
+
+                </div>
+
+                <strong>
+                    ${beginnerPercentage}% Complete
+                </strong>
+
             </div>
 
+
+            <!-- INTERMEDIATE -->
+
             <div class="course-summary-item">
+
                 <h3>📘 Intermediate Course</h3>
 
                 <p>
                     ${intermediateCompleted.length}
-                    / ${intermediateTotal} completed
+                    / ${intermediateTotal}
+                    lessons completed
                 </p>
+
+                <div class="course-progress-bar">
+
+                    <div
+                        class="course-progress-fill"
+                        style="width: ${intermediatePercentage}%"
+                    ></div>
+
+                </div>
+
+                <strong>
+                    ${intermediatePercentage}% Complete
+                </strong>
+
             </div>
 
+
+            <!-- ADVANCED -->
+
             <div class="course-summary-item">
+
                 <h3>🟣 Advanced Course</h3>
 
                 <p>
                     ${advancedCompleted.length}
-                    / ${advancedTotal} completed
+                    / ${advancedTotal}
+                    lessons completed
                 </p>
+
+                <div class="course-progress-bar">
+
+                    <div
+                        class="course-progress-fill"
+                        style="width: ${advancedPercentage}%"
+                    ></div>
+
+                </div>
+
+                <strong>
+                    ${advancedPercentage}% Complete
+                </strong>
+
             </div>
 
         </div>
     `;
 
-   const certificateBox =
-    document.getElementById("course-certificate");
 
-if (certificateBox) {
+    /* =========================
+       CERTIFICATE
+       ========================= */
 
-    if (completedLessons === totalLessons && totalLessons > 0) {
+    const certificateBox =
+        document.getElementById("course-certificate");
+
+    if (certificateBox) {
+
+        if (
+            completedLessons === totalLessons &&
+            totalLessons > 0
+        ) {
+
+            const savedStudentName =
+                localStorage.getItem("sifStudentName");
+
+            let studentName =
+                savedStudentName;
+
+            if (!studentName) {
+
+                studentName = prompt(
+                    "Enter your name for your SIF FOREX HUB certificate:"
+                );
+
+                if (!studentName) {
+
+                    studentName =
+                        "SIF FOREX HUB Student";
+                }
+
+                localStorage.setItem(
+                    "sifStudentName",
+                    studentName
+                );
+            }
 
 
-const savedStudentName =
-    localStorage.getItem("sifStudentName");
+            const certificateId =
+                "SIF-FX-" +
+                new Date().getFullYear() +
+                "-" +
+                Math.floor(
+                    1000 +
+                    Math.random() * 9000
+                );
 
-let studentName = savedStudentName;
 
-if (!studentName) {
-    studentName = prompt(
-        "Enter your name for your SIF FOREX HUB certificate:"
-    );
+            const completionDate =
+                new Date().toLocaleDateString(
+                    "en-NG",
+                    {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
 
-    if (!studentName) {
-        studentName = "SIF FOREX HUB Student";
+
+            certificateBox.innerHTML = `
+
+                <div class="course-certificate">
+
+                    <h2>
+                        🎓 Certificate of Completion
+                    </h2>
+
+                    <p>
+                        Congratulations!
+                    </p>
+
+                    <h3>
+                        ${studentName}
+                    </h3>
+
+                    <p>
+                        has successfully completed the
+                        SIF FOREX HUB Forex Trading Course.
+                    </p>
+
+                    <p>
+                        📅 Date of Completion:
+                        ${completionDate}
+                    </p>
+
+                    <p>
+                        🆔 Certificate ID:
+                        ${certificateId}
+                    </p>
+
+                    <h3>
+                        🏆 SIF FOREX HUB Certified Forex Trader
+                    </h3>
+
+                    <p>
+                        Beginner • Intermediate • Advanced
+                    </p>
+
+                    <strong>
+                        ${completedLessons} /
+                        ${totalLessons}
+                        Lessons Completed — 100%
+                    </strong>
+
+                    <br><br>
+
+                    <button onclick="printCertificate()">
+                        🖨️ Print Certificate
+                    </button>
+
+                </div>
+            `;
+
+        } else {
+
+            certificateBox.innerHTML = `
+
+                <div class="course-certificate-locked">
+
+                    <h3>
+                        🔒 Certificate Locked
+                    </h3>
+
+                    <p>
+                        Complete all ${totalLessons}
+                        lessons to unlock your certificate.
+                    </p>
+
+                    <p>
+                        ${completedLessons} /
+                        ${totalLessons}
+                        lessons completed
+                    </p>
+
+                </div>
+            `;
+        }
     }
+                       }
 
-    localStorage.setItem(
-        "sifStudentName",
-        studentName
-    );
-}
-
-
-const certificateId =
-    "SIF-FX-" +
-    new Date().getFullYear() +
-    "-" +
-    Math.floor(1000 + Math.random() * 9000);
-
-const completionDate =
-    new Date().toLocaleDateString("en-NG", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
-
-        certificateBox.innerHTML = `
-            <div class="course-certificate">
-
-                <h2>🎓 Certificate of Completion</h2>
-
-<p>Congratulations!</p>
-
-<h3>${studentName}</h3>
-
-<p>
-    has successfully completed the
-    SIF FOREX HUB Forex Trading Course.
-</p>
-
-<p>
-    📅 Date of Completion: ${completionDate}
-</p>
-
-<p>
-    🆔 Certificate ID: ${certificateId}
-</p>
-
-                <p>
-                    You have successfully completed
-                    the SIF FOREX HUB Forex Trading Course.
-                </p>
-
-                <h3>🏆 SIF FOREX HUB Certified Forex Trader</h3>
-
-                <p>
-                    Beginner • Intermediate • Advanced
-                </p>
-
-                <strong>
-                    ${completedLessons} / ${totalLessons}
-                    Lessons Completed — 100%
-                </strong>
-
-<button onclick="printCertificate()">
-    🖨️ Print Certificate
-</button>
-
-            </div>
-        `;
-
-    } else {
-
-        certificateBox.innerHTML = `
-            <div class="course-certificate-locked">
-
-                <h3>🔒 Certificate Locked</h3>
-
-                <p>
-                    Complete all ${totalLessons} lessons
-                    to unlock your certificate.
-                </p>
-
-                <p>
-                    ${completedLessons} / ${totalLessons}
-                    lessons completed
-                </p>
-
-            </div>
-        `;
-    }
-}
-}
 
     
 
