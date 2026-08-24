@@ -678,3 +678,105 @@ section > h2 {
     }
 
 }
+
+/* =========================================================
+   SIF FOREX HUB PROFESSIONAL CERTIFICATE
+   ========================================================= */
+
+.course-certificate {
+    max-width: 850px;
+    margin: 30px auto;
+    padding: 55px 45px;
+    text-align: center;
+    background: #ffffff;
+    border: 8px solid #d4af37;
+    outline: 3px solid #111827;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
+    position: relative;
+}
+
+.course-certificate::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 2px solid #d4af37;
+    pointer-events: none;
+}
+
+.course-certificate h2 {
+    font-size: 38px;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+.course-certificate h3 {
+    color: #111827;
+    font-size: 25px;
+}
+
+.course-certificate p {
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.course-certificate strong {
+    display: block;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.course-certificate button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Certificate locked */
+
+.course-certificate-locked {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 35px;
+    text-align: center;
+    border-radius: 12px;
+    background: #f3f4f6;
+}
+
+.course-certificate-locked h3 {
+    font-size: 24px;
+}
+
+
+/* =========================================================
+   PRINT CERTIFICATE
+   ========================================================= */
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    .course-certificate,
+    .course-certificate * {
+        visibility: visible;
+    }
+
+    .course-certificate {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .course-certificate button {
+        display: none;
+    }
+}
