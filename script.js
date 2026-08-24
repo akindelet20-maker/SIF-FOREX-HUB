@@ -2152,56 +2152,59 @@ function updateLearningDashboard() {
 
             certificateBox.innerHTML = `
 
-                <div class="course-certificate">
+              <div class="course-certificate">
 
-                    <h2>
-                        🎓 Certificate of Completion
-                    </h2>
+    <h2>🏆 SIF FOREX HUB</h2>
 
-                    <p>
-                        Congratulations!
-                    </p>
+    <p>
+        <strong>CERTIFICATE OF COMPLETION</strong>
+    </p>
 
-                    <h3>
-                        ${studentName}
-                    </h3>
+    <p>
+        This certificate is proudly presented to
+    </p>
 
-                    <p>
-                        has successfully completed the
-                        SIF FOREX HUB Forex Trading Course.
-                    </p>
+    <h3>${studentName}</h3>
 
-                    <p>
-                        📅 Date of Completion:
-                        ${completionDate}
-                    </p>
+    <p>
+        for successfully completing the
+    </p>
 
-                    <p>
-                        🆔 Certificate ID:
-                        ${certificateId}
-                    </p>
+    <h3>
+        Forex Trading & Smart Money Concepts Course
+    </h3>
 
-                    <h3>
-                        🏆 SIF FOREX HUB Certified Forex Trader
-                    </h3>
+    <p>
+        Beginner • Intermediate • Advanced
+    </p>
 
-                    <p>
-                        Beginner • Intermediate • Advanced
-                    </p>
+    <strong>
+        🏆 SIF FOREX HUB Certified Forex Trader
+    </strong>
 
-                    <strong>
-                        ${completedLessons} /
-                        ${totalLessons}
-                        Lessons Completed — 100%
-                    </strong>
+    <p>
+        📅 Date of Completion:
+        ${completionDate}
+    </p>
 
-                    <br><br>
+    <p>
+        🆔 Certificate ID:
+        ${certificateId}
+    </p>
 
-                    <button onclick="printCertificate()">
-                        🖨️ Print Certificate
-                    </button>
+    <strong>
+        ${completedLessons} /
+        ${totalLessons}
+        Lessons Completed — 100%
+    </strong>
 
-                </div>
+    <button onclick="printCertificate()">
+        🖨️ Print / Save Certificate
+    </button>
+
+</div>  
+
+                    
             `;
 
         } else {
