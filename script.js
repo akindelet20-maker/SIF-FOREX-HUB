@@ -289,7 +289,6 @@ function getPipValue(pair, price) {
 /* =========================================================
    4. TRADING JOURNAL - ADD TRADE
    ========================================================= */
-
 function addTrade() {
 
     const pair = getValue("journal-pair");
@@ -302,7 +301,6 @@ function addTrade() {
             ? tradeTypeElement.value
             : "Buy";
 
-
     const entry = getValue("entry-price");
 
     const stopLoss = getValue("journal-stop");
@@ -311,6 +309,8 @@ function addTrade() {
 
     const lotSize = getValue("journal-lot");
 
+    const profitLoss = getValue("trade-profit");
+
     const resultElement =
         document.getElementById("trade-result");
 
@@ -318,7 +318,6 @@ function addTrade() {
         resultElement
             ? resultElement.value
             : "Pending";
-
 
     const notes = getValue("trade-notes");
 
@@ -358,6 +357,8 @@ function addTrade() {
 
         lotSize: lotSize,
 
+        profitLoss: profitLoss || "0",
+
         tradeResult: tradeResult,
 
         notes: notes || "No notes added.",
@@ -395,6 +396,7 @@ function addTrade() {
 
 
     alert("Trade saved successfully! 📒");
+
 }
 
 
