@@ -612,39 +612,62 @@ function clearTradeInputs() {
 /* =========================================================
    9. TRADING STATISTICS
    ========================================================= */
-
 function updateTradingStats() {
 
     const trades = getTrades();
 
-
-    const totalTrades =
-        trades.length;
-
+    const totalTrades = trades.length;
 
     const wins =
         trades.filter(
-            trade =>
-                trade.tradeResult === "Win"
+            trade => trade.tradeResult === "Win"
         ).length;
-
 
     const losses =
         trades.filter(
-            trade =>
-                trade.tradeResult === "Loss"
+            trade => trade.tradeResult === "Loss"
         ).length;
-
 
     const breakEven =
         trades.filter(
-            trade =>
-                trade.tradeResult === "Break Even"
+            trade => trade.tradeResult === "Break Even"
         ).length;
 
 
-    let winRate = 0;
+    /* Calculate Profit / Loss */
 
+    const profitValues =
+        trades.map(
+            trade => Number(trade.profitLoss) || 0
+        );
+
+
+    const totalProfitLoss =
+        profitValues.reduce(
+            (total, value) => total + value,
+            0
+        );
+
+
+    const totalProfit =
+        profitValues
+            .filter(value => value > 0)
+            .reduce(
+                (total, value) => total + value,
+                0
+            );
+
+
+    const totalLoss =
+        profitValues
+            .filter(value => value < 0)
+            .reduce(
+                (total, value) => total + value,
+                0
+            );
+
+
+    let winRate = 0;
 
     if (totalTrades > 0) {
 
@@ -654,7 +677,7 @@ function updateTradingStats() {
     }
 
 
-    /* Update dashboard */
+    /* Update existing dashboard */
 
     const totalElement =
         document.getElementById("total-trades");
@@ -701,7 +724,44 @@ function updateTradingStats() {
             winRate.toFixed(1) + "%";
 
     }
-}
+
+
+    /* Update Profit / Loss statistics */
+
+    const totalProfitLossElement =
+        document.getElementById("total-profit-loss");
+
+    if (totalProfitLossElement) {
+
+        totalProfitLossElement.textContent =
+            "$" + totalProfitLoss.toFixed(2);
+
+    }
+
+
+    const totalProfitElement =
+        document.getElementById("total-profit");
+
+    if (totalProfitElement) {
+
+        totalProfitElement.textContent =
+            "$" + totalProfit.toFixed(2);
+
+    }
+
+
+    const totalLossElement =
+        document.getElementById("total-loss");
+
+    if (totalLossElement) {
+
+        totalLossElement.textContent =
+            "$" + totalLoss.toFixed(2);
+
+    }
+
+       }
+
 
 
 /* =========================================================
