@@ -618,15 +618,24 @@ function updateTradingStats() {
 
     const totalTrades = trades.length;
 
+
+    /* Wins */
+
     const wins =
         trades.filter(
             trade => trade.tradeResult === "Win"
         ).length;
 
+
+    /* Losses */
+
     const losses =
         trades.filter(
             trade => trade.tradeResult === "Loss"
         ).length;
+
+
+    /* Break Even */
 
     const breakEven =
         trades.filter(
@@ -634,7 +643,7 @@ function updateTradingStats() {
         ).length;
 
 
-    /* Calculate Profit / Loss */
+    /* Profit / Loss values */
 
     const profitValues =
         trades.map(
@@ -642,12 +651,16 @@ function updateTradingStats() {
         );
 
 
+    /* Total Profit / Loss */
+
     const totalProfitLoss =
         profitValues.reduce(
             (total, value) => total + value,
             0
         );
 
+
+    /* Total Profit */
 
     const totalProfit =
         profitValues
@@ -658,6 +671,8 @@ function updateTradingStats() {
             );
 
 
+    /* Total Loss */
+
     const totalLoss =
         profitValues
             .filter(value => value < 0)
@@ -666,7 +681,8 @@ function updateTradingStats() {
                 0
             );
 
-       /* Best Trade */
+
+    /* Best Trade */
 
     const bestTrade =
         profitValues.length > 0
@@ -682,6 +698,8 @@ function updateTradingStats() {
             : 0;
 
 
+    /* Win Rate */
+
     let winRate = 0;
 
     if (totalTrades > 0) {
@@ -692,43 +710,59 @@ function updateTradingStats() {
     }
 
 
-    /* Update existing dashboard */
+    /* Display Total Trades */
 
     const totalElement =
         document.getElementById("total-trades");
 
     if (totalElement) {
+
         totalElement.textContent =
             totalTrades;
+
     }
 
+
+    /* Display Wins */
 
     const winsElement =
         document.getElementById("total-wins");
 
     if (winsElement) {
+
         winsElement.textContent =
             wins;
+
     }
 
+
+    /* Display Losses */
 
     const lossesElement =
         document.getElementById("total-losses");
 
     if (lossesElement) {
+
         lossesElement.textContent =
             losses;
+
     }
 
+
+    /* Display Break Even */
 
     const breakEvenElement =
         document.getElementById("total-break-even");
 
     if (breakEvenElement) {
+
         breakEvenElement.textContent =
             breakEven;
+
     }
 
+
+    /* Display Win Rate */
 
     const winRateElement =
         document.getElementById("win-rate");
@@ -741,7 +775,7 @@ function updateTradingStats() {
     }
 
 
-    /* Update Profit / Loss statistics */
+    /* Display Total P/L */
 
     const totalProfitLossElement =
         document.getElementById("total-profit-loss");
@@ -754,6 +788,8 @@ function updateTradingStats() {
     }
 
 
+    /* Display Total Profit */
+
     const totalProfitElement =
         document.getElementById("total-profit");
 
@@ -765,6 +801,8 @@ function updateTradingStats() {
     }
 
 
+    /* Display Total Loss */
+
     const totalLossElement =
         document.getElementById("total-loss");
 
@@ -775,7 +813,37 @@ function updateTradingStats() {
 
     }
 
-       }
+
+    /* Display Best Trade */
+
+    const bestTradeElement =
+        document.getElementById("best-trade");
+
+    if (bestTradeElement) {
+
+        bestTradeElement.textContent =
+            "$" + bestTrade.toFixed(2);
+
+    }
+
+
+    /* Display Average Profit / Loss */
+
+    const averageProfitLossElement =
+        document.getElementById("average-profit-loss");
+
+    if (averageProfitLossElement) {
+
+        averageProfitLossElement.textContent =
+            "$" + averageProfitLoss.toFixed(2);
+
+    }
+
+}
+
+        
+
+
 
 
 
