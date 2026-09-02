@@ -666,6 +666,21 @@ function updateTradingStats() {
                 0
             );
 
+       /* Best Trade */
+
+    const bestTrade =
+        profitValues.length > 0
+            ? Math.max(...profitValues)
+            : 0;
+
+
+    /* Average Profit / Loss */
+
+    const averageProfitLoss =
+        totalTrades > 0
+            ? totalProfitLoss / totalTrades
+            : 0;
+
 
     let winRate = 0;
 
